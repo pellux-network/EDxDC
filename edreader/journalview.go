@@ -122,7 +122,7 @@ func RenderLocationPage(page *mfd.Page, state Journalstate) {
 func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 	if state.ShowSplashScreen {
 		page.Add("################")
-		page.Add("  EDxDC v0.1.0  ")
+		page.Add("  EDxDC v1.0.0-beta  ")
 		page.Add("################")
 		return
 	}
