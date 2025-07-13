@@ -24,3 +24,4 @@ jobs:
         uses: actions/go-dependency-submission@v2.0.3
         with:
           go-mod-path: ./go.mod
+          token: ${{ secrets.GITHUB_TOKEN }}
