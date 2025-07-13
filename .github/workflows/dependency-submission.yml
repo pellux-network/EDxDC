@@ -1,0 +1,22 @@
+name: Submit Go Dependencies
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  dependency-submission:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.4'  # Adjust Go version as needed
+
+      - name: Submit Go dependencies
+        uses: actions/go-dependency-submission@v1
+        with:
+          go-mod-path: ./go.mod

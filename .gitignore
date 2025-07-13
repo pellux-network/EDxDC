@@ -1,0 +1,42 @@
+# Windows thumbnail cache files
+Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Golang project files
+.idea/*
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# =========================
+# Operating System Files
+# =========================
+*.exe
+# Except the required dependency: 
+!X52MFDDriver.exe 
+mfd.json
+
+EDxDC/
+EDxDC*/
+debug
+logs/
+*.zip
+
+# Debug folder
+debug_journal
+
+# Log file
+custom.log

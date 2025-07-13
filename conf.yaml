@@ -1,0 +1,6 @@
+journalsfolder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+
+pages:
+  destination: true
+  location: true
+  cargo: true
