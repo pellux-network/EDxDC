@@ -4,7 +4,7 @@
 
 ## [v0.1.0] - 07-12-2025
 
-This release takes previous work from the fork and gives it it's own repo
+This release takes previous work from the fork and gives it it's own repo and a new name reflecting the intent to support other types of displays in future releases.
 
 ## EDx52display Fork Changelog
 
