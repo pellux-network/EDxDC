@@ -31,6 +31,7 @@ jobs:
     env:
       GOOS: windows
       GOARCH: amd64
+      CODEQL_EXTRACTOR_GO_BUILD_TRIPLET: windows-amd64
     permissions:
       # required for all workflows
       security-events: write
