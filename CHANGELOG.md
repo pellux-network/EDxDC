@@ -1,8 +1,14 @@
 # Changelog
 
-## EDxDC Fork Changelog
+## EDxDC Changelog
 
-## [v0.1.0] - 07-12-2025
+## [v1.1.0-beta] - XX-XX-XXXX [PLANNED RELEASE]
+
+### Added
+
+- Installer script to be used by Inno Setup during build to facilitate installer releases
+
+## [v1.0.0-beta] - 07-12-2025
 
 This release takes previous work from the fork and gives it it's own repo and a new name reflecting the intent to support other types of displays in future releases.
 
@@ -10,7 +16,7 @@ This release takes previous work from the fork and gives it it's own repo and a 
 
 ## [v0.2.4] - XX-XX-XXXX
 
-> **INFO**: _Orphaned release. Rolled into v0.1.0 of EDxDC_ 
+> **INFO**: _Orphaned release. Rolled into v1.0.0-beta of EDxDC_ 
 
 ### Added
 

@@ -83,7 +83,6 @@ func RunUpdaterWithLog(oldDir, newExe, newDir, logFile string) error {
 		"conf.yaml",
 		"LICENSE",
 		"README.md",
-		".edx52_appdir",
 	}
 	knownDirs := []string{
 		"names",
