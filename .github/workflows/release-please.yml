@@ -12,8 +12,9 @@ name: release-please
 jobs:
   release-please:
     runs-on: ubuntu-latest
+    environment: Actions
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@v4.2.0
         with:
           # this assumes that you have created a personal access token
           # (PAT) and configured it as a GitHub action secret named
