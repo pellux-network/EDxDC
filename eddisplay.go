@@ -37,13 +37,6 @@ func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	return []byte(timestamp + " - " + strings.ToUpper(level) + " - " + message + "\n"), nil
 }
 
-func ensureAppMarker() {
-	exePath, _ := os.Executable()
-	appDir := filepath.Dir(exePath)
-	marker := filepath.Join(appDir, ".edx52_appdir")
-	_ = os.WriteFile(marker, []byte("EDxDC app directory marker"), 0644)
-}
-
 func cleanupOldUpdaters() {
 	tmpDir := filepath.Join(os.TempDir(), "EDxDC")
 	entries, err := os.ReadDir(tmpDir)
@@ -58,7 +51,6 @@ func cleanupOldUpdaters() {
 }
 
 func main() {
-	ensureAppMarker()
 	cleanupOldUpdaters()
 
 	if len(os.Args) > 1 && os.Args[1] == "run-updater" {
