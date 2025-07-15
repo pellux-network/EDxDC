@@ -119,24 +119,32 @@ func onReady() {
 		log.SetLevel(logLevel)
 		log.SetFormatter(&TextLogFormatter{})
 
-		// Ensure logs directory exists
-		logDir := "logs"
+		// Use %APPDATA%\EDxDC for config and logs
+		appDataDir, err := os.UserConfigDir()
+		if err != nil {
+			log.Fatalln("Could not determine user config dir:", err)
+		}
+		baseDir := filepath.Join(appDataDir, "EDxDC")
+		_ = os.MkdirAll(baseDir, 0755)
+
+		// Logs directory inside baseDir
+		logDir := filepath.Join(baseDir, "logs")
 		_ = os.MkdirAll(logDir, 0755)
 		logFileName := time.Now().Format("2006-01-02_15.04.05") + ".log"
 		logPath := filepath.Join(logDir, logFileName)
 
-		// Set up log rotation
 		log.SetOutput(&lumberjack.Logger{
 			Filename:   logPath,
-			MaxSize:    10, // megabytes
+			MaxSize:    10,
 			MaxBackups: 5,
-			MaxAge:     30,   //days
-			Compress:   true, // compress old logs
+			MaxAge:     30,
+			Compress:   true,
 		})
 
 		log.Infof("Logging to %s", logPath)
 
-		conf := conf.LoadConf()
+		confPath := filepath.Join(baseDir, "main.conf")
+		conf := conf.LoadOrCreateConf(confPath)
 
 		// Calculate number of enabled pages
 		pageCount := 0
