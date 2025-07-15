@@ -3,6 +3,7 @@ module github.com/pellux-network/EDxDC
 go 1.24.4
 
 require (
+	github.com/abemedia/go-winsparkle v0.9.1
 	github.com/buger/jsonparser v1.1.1
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/getlantern/systray v1.2.2

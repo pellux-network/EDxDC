@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>EDxDC Updates</title>
+    <link>https://pellux-network.github.io/EDxDC/appcast.xml</link>
+    <description>Update feed for EDxDC application</description>
+    <language>en</language>
+    <item>
+      <title>Version 1.1.0</title>
+      <sparkle:version>110</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+      <sparkle:releaseNotesLink>https://pellux-network.github.io/EDxDC/CHANGELOG.md</sparkle:releaseNotesLink>
+      <description>Initial release of EDxDC.</description>
+      <pubDate>Mon, 01 Jul 2024 12:00:00 +0000</pubDate>
+      <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.1.0-beta/EDxDC-v1.1.0-beta-Setup.exe"
+                 sparkle:dsaSignature="PUT_YOUR_SIGNATURE_HERE"
+                 length="0"
+                 type="application/octet-stream"/>
+    </item>
+  </channel>
+</rss>

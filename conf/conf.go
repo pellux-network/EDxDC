@@ -12,8 +12,9 @@ import (
 
 // Conf is the app config
 type Conf struct {
-	JournalsFolder string          `yaml:"journalsfolder"`
-	Pages          map[string]bool `yaml:"pages"`
+	JournalsFolder  string          `yaml:"journalsfolder"`
+	Pages           map[string]bool `yaml:"pages"`
+	CheckForUpdates bool            `yaml:"checkforupdates"`
 }
 
 // LoadOrCreateConf loads the config from the given path, or creates a default one if missing.
@@ -30,6 +31,8 @@ pages:
   destination: true
   location: true
   cargo: true
+
+checkforupdates: true
 `
 		_ = os.MkdirAll(filepath.Dir(confPath), 0755)
 		if err := os.WriteFile(confPath, []byte(defaultYAML), 0644); err != nil {
