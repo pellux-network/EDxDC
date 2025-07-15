@@ -71,8 +71,11 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep = usUninstall then begin
     if not RetainLogs then
-      DelTree(ExpandConstant('{app}\logs'), True, True, True);
+      DelTree(ExpandConstant('{userappdata}\EDxDC\logs'), True, True, True);
     if not RetainConf then
-      DeleteFile(ExpandConstant('{app}\conf.yaml'));
+      DeleteFile(ExpandConstant('{userappdata}\EDxDC\conf.yaml'));
+    // If neither logs nor conf are retained, remove the whole directory
+    if (not RetainLogs) and (not RetainConf) then
+      DelTree(ExpandConstant('{userappdata}\EDxDC'), True, True, True);
   end;
 end;

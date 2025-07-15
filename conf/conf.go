@@ -3,26 +3,46 @@ package conf
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	log "github.com/sirupsen/logrus"
-
 	"golang.org/x/sys/windows/registry"
-
 	"gopkg.in/yaml.v2"
 )
 
 // Conf is the app config
 type Conf struct {
-	JournalsFolder string
-	RefreshRateMS  int
-	Pages          map[string]bool `yaml:"pages"` // Add this line
+	JournalsFolder string          `yaml:"journalsfolder"`
+	Pages          map[string]bool `yaml:"pages"`
 }
 
-// LoadConf loads the config from the yaml file
-func LoadConf() Conf {
+// LoadOrCreateConf loads the config from the given path, or creates a default one if missing.
+func LoadOrCreateConf(confPath string) Conf {
 	log.Debugln("Loading configuration...")
 	defer log.Debugln("Configuration loaded.")
-	data, err := os.ReadFile("conf.yaml")
+
+	// If config does not exist, create it with defaults
+	if _, err := os.Stat(confPath); os.IsNotExist(err) {
+		log.Warnf("Config file not found at %s, creating default config.", confPath)
+		defaultYAML := `journalsfolder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+
+pages:
+  destination: true
+  location: true
+  cargo: true
+`
+		_ = os.MkdirAll(filepath.Dir(confPath), 0755)
+		if err := os.WriteFile(confPath, []byte(defaultYAML), 0644); err != nil {
+			log.Fatalln("Failed to write default config:", err)
+		}
+		var conf Conf
+		if err := yaml.Unmarshal([]byte(defaultYAML), &conf); err != nil {
+			log.Fatalln("Failed to unmarshal default config:", err)
+		}
+		return conf
+	}
+
+	data, err := os.ReadFile(confPath)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
