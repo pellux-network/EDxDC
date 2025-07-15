@@ -2,12 +2,6 @@
 
 ## EDxDC Changelog
 
-## [v1.1.0-beta] - XX-XX-XXXX [PLANNED RELEASE]
-
-### Added
-
-- Installer script to be used by Inno Setup during build to facilitate installer releases
-
 ## [v1.0.0-beta] - 07-12-2025
 
 This release takes previous work from the fork and gives it it's own repo and a new name reflecting the intent to support other types of displays in future releases.
