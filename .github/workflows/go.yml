@@ -39,8 +39,11 @@ jobs:
       - name: Create Release Zip
         run: powershell Compress-Archive -Path .\EDxDC -DestinationPath .\EDxDC-v${{ env.VERSION }}-portable-amd64.zip
 
-      - name: Copy EXE to Installer Directory
-        run: Copy-Item -Path .\EDxDC.exe -Destination .\installer\EDxDC.exe
+      - name: Copy Files to Installer Directory
+        run: |
+          Copy-Item -Path .\EDxDC.exe,LICENSE,README.md -Destination .\installer\ -Force
+          Copy-Item -Path .\names\* -Destination .\installer\names\ -Recurse -Force
+          Copy-Item -Path .\bin\* -Destination .\installer\bin\ -Recurse -Force
 
       - name: Install Inno Setup
         run: |
