@@ -43,6 +43,8 @@ jobs:
       - name: Copy Files to Installer Directory
         run: |
           Copy-Item -Path .\EDxDC.exe,LICENSE,README.md -Destination .\installer\ -Force
+          New-Item -Path .\installer\names -ItemType Directory -Force
+          New-Item -Path .\installer\bin -ItemType Directory -Force
           Copy-Item -Path .\names\* -Destination .\installer\names\ -Recurse -Force
           Copy-Item -Path .\bin\* -Destination .\installer\bin\ -Recurse -Force
 
