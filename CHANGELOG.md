@@ -2,6 +2,20 @@
 
 ## EDxDC Changelog
 
+## [1.1.0-beta](https://github.com/pellux-network/EDxDC/compare/v1.0.0-beta...v1.1.0-beta) (2025-07-16)
+
+
+### Features
+
+* Add installer for traditional Windows install option ([#9](https://github.com/pellux-network/EDxDC/issues/9)) ([af3f0d2](https://github.com/pellux-network/EDxDC/commit/af3f0d29175a7fec343f6b74f6d79e3fa0847a39))
+* added installer and auto-updating ([71b630e](https://github.com/pellux-network/EDxDC/commit/71b630e9f19e42548b5580ccc0dbc0fe7093546e))
+* completed initial installer work ([#9](https://github.com/pellux-network/EDxDC/issues/9)) ([9a36bc6](https://github.com/pellux-network/EDxDC/commit/9a36bc67d635291eea3076e7a4eec2a0fa74c5e1))
+
+
+### Bug Fixes
+
+* installs can now run in uac folders w/o admin ([#14](https://github.com/pellux-network/EDxDC/issues/14)) ([0727381](https://github.com/pellux-network/EDxDC/commit/0727381c03a13b9caf11ca49d5185611c4b401c3))
+
 ## [v1.0.0-beta] - 07-12-2025
 
 This release takes previous work from the fork and gives it it's own repo and a new name reflecting the intent to support other types of displays in future releases.
