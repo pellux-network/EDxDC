@@ -11,7 +11,7 @@
       <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
       <sparkle:releaseNotesLink>https://pellux-network.github.io/EDxDC/CHANGELOG.md</sparkle:releaseNotesLink>
       <description>Initial installable and updateable release of EDxDC.</description>
-      <pubDate>Mon, 01 Jul 2024 12:00:00 +0000</pubDate>
+      <pubDate>Mon, 16 Jul 2025 07:30:00 +0000</pubDate>
       <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.1.0-beta/EDxDC-1.1.0-beta-Setup.exe"
                  length="0"
                  type="application/octet-stream"/>
