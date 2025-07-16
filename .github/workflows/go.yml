@@ -16,15 +16,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Fetch all tags
+        run: git fetch --tags
+
+      - name: Extract version from latest tag
+        id: get_version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0)
+          echo "VERSION=${LATEST_TAG#v}" >> $GITHUB_ENV
+          echo "TAG_NAME=${LATEST_TAG}" >> $GITHUB_ENV
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: "1.24.4"
-
-      - name: Extract version from tag
-        id: get_version
-        run: |
-          echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
 
       - name: Build Project
         run: go build -ldflags "-H=windowsgui -s -w" -v -o EDxDC.exe
@@ -62,6 +67,6 @@ jobs:
           files: |
             ./installer/EDxDC-v${{ env.VERSION }}-beta-Setup.exe
             ./EDxDC-v${{ env.VERSION }}-portable-amd64.zip
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ env.TAG_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
