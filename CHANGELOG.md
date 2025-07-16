@@ -2,6 +2,13 @@
 
 ## EDxDC Changelog
 
+## [1.1.1-beta](https://github.com/pellux-network/EDxDC/compare/v1.1.0-beta...v1.1.1-beta) (2025-07-16)
+
+
+### Bug Fixes
+
+* removed extra spaces in arrival and splash screen ([9ddca9e](https://github.com/pellux-network/EDxDC/commit/9ddca9e23ce0af8f733cdce5c6441761ec9fb9f9))
+
 ## [1.1.0-beta](https://github.com/pellux-network/EDxDC/compare/v1.0.0-beta...v1.1.0-beta) (2025-07-16)
 
 
