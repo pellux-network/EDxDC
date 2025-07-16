@@ -22,7 +22,12 @@ jobs:
       - name: Extract version from latest tag
         id: get_version
         run: |
-          $latestTag = git describe --tags --abbrev=0
+          $tags = git tag --sort=-creatordate
+          if (-not $tags) {
+            Write-Error "No git tags found. Please create a tag before running this workflow."
+            exit 1
+          }
+          $latestTag = ($tags -split "`n")[0]
           $version = $latestTag -replace '^v', ''
           echo "VERSION=$version" >> $env:GITHUB_ENV
           echo "TAG_NAME=$latestTag" >> $env:GITHUB_ENV
