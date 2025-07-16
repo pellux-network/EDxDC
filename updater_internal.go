@@ -80,7 +80,7 @@ func RunUpdaterWithLog(oldDir, newExe, newDir, logFile string) error {
 	// List of known files and directories to delete (update as needed for your app)
 	knownFiles := []string{
 		"EDxDC*.exe", // all versioned exes
-		"conf.yaml",
+		"main.conf",
 		"LICENSE",
 		"README.md",
 	}

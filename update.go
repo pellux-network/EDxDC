@@ -146,8 +146,8 @@ func doAutoUpdate(release githubRelease) error {
 		return fmt.Errorf("could not find new directory after unzip")
 	}
 
-	// 4. Copy conf.yaml and logs to the new directory.
-	copyFile(filepath.Join(currentDir, "conf.yaml"), filepath.Join(newDir, "conf.yaml"))
+	// 4. Copy main.conf and logs to the new directory.
+	copyFile(filepath.Join(currentDir, "main.conf"), filepath.Join(newDir, "main.conf"))
 	copyDir(filepath.Join(currentDir, "logs"), filepath.Join(newDir, "logs"))
 
 	// 5. Find new exe path (search for .exe in newDir).

@@ -1,3 +1,5 @@
+github.com/abemedia/go-winsparkle v0.9.1 h1:e9BcZMmxS+DqbjHbLexoHdrPKotByB7L0GwghvFX3F8=
+github.com/abemedia/go-winsparkle v0.9.1/go.mod h1:1FY6RD8GbC2QOuFrm0DY1Xpp1zaii8ajKimPCIQOXmY=
 github.com/akavel/rsrc v0.10.2 h1:Zxm8V5eI1hW4gGaYsJQUhxpjkENuG91ki8B4zCrvEsw=
 github.com/akavel/rsrc v0.10.2/go.mod h1:uLoCtb9J+EyAqh+26kdrTgmzRBFPGOolLWKpdxkKq+c=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=

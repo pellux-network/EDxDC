@@ -13,6 +13,8 @@ import (
 
 	_ "embed"
 
+	"github.com/abemedia/go-winsparkle"
+	_ "github.com/abemedia/go-winsparkle/dll" // Embed DLL.
 	"github.com/getlantern/systray"
 	"github.com/ncruces/zenity"
 	"github.com/pellux-network/EDxDC/conf"
@@ -27,7 +29,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "v1.0.0-beta"
+const AppVersion = "v1.1.0-beta"
 
 func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
@@ -51,6 +53,45 @@ func cleanupOldUpdaters() {
 }
 
 func main() {
+	exePath, err := os.Executable()
+	if err != nil {
+		fmt.Println("Could not determine executable path:", err)
+		os.Exit(1)
+	}
+	exeDir := filepath.Dir(exePath)
+	portablePath := filepath.Join(exeDir, ".portable")
+
+	_, err = os.Stat(portablePath)
+	isPortable := err == nil
+
+	// Determine config path and load config before WinSparkle setup
+	var baseDir string
+	if isPortable {
+		baseDir = exeDir
+	} else {
+		appDataDir, err := os.UserConfigDir()
+		if err != nil {
+			fmt.Println("Could not determine user config dir:", err)
+			os.Exit(1)
+		}
+		baseDir = filepath.Join(appDataDir, "EDxDC")
+		_ = os.MkdirAll(baseDir, 0755)
+	}
+	confPath := filepath.Join(baseDir, "main.conf")
+	appConf := conf.LoadOrCreateConf(confPath)
+
+	if !isPortable {
+		// WinSparkle setup
+		winsparkle.SetAppcastURL("https://pellux-network.github.io/EDxDC/appcast.xml")
+		winsparkle.SetAppDetails("pellux-network.github.io/EDxDC", "EDxDC", AppVersion)
+		winsparkle.SetAutomaticCheckForUpdates(appConf.CheckForUpdates)
+
+		winsparkle.Init()
+		defer winsparkle.Cleanup()
+	} else {
+		fmt.Println("Portable mode detected: using manual update function.")
+	}
+
 	cleanupOldUpdaters()
 
 	if len(os.Args) > 1 && os.Args[1] == "run-updater" {
@@ -72,10 +113,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	systray.Run(onReady, onExit)
+	systray.Run(func() { onReady(isPortable, appConf) }, onExit)
 }
 
-func onReady() {
+func onReady(isPortable bool, conf conf.Conf) {
 	// Set up systray icon and menu
 	systray.SetIcon(getIcon()) // You can provide your own icon as []byte
 	systray.SetTitle("EDxDC")
@@ -88,8 +129,10 @@ func onReady() {
 	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit EDxDC")
 
-	// Check for updates at startup (non-blocking)
-	CheckForUpdate(AppVersion)
+	// Check for updates at startup
+	if isPortable {
+		CheckForUpdate(AppVersion) // Manual update function
+	}
 
 	// Handle About menu click
 	go func() {
@@ -119,13 +162,22 @@ func onReady() {
 		log.SetLevel(logLevel)
 		log.SetFormatter(&TextLogFormatter{})
 
-		// Use %APPDATA%\EDxDC for config and logs
-		appDataDir, err := os.UserConfigDir()
-		if err != nil {
-			log.Fatalln("Could not determine user config dir:", err)
+		// Use app directory for config and logs in portable mode, otherwise use %APPDATA%\EDxDC
+		var baseDir string
+		if isPortable {
+			exePath, err := os.Executable()
+			if err != nil {
+				log.Fatalln("Could not determine executable path:", err)
+			}
+			baseDir = filepath.Dir(exePath)
+		} else {
+			appDataDir, err := os.UserConfigDir()
+			if err != nil {
+				log.Fatalln("Could not determine user config dir:", err)
+			}
+			baseDir = filepath.Join(appDataDir, "EDxDC")
+			_ = os.MkdirAll(baseDir, 0755)
 		}
-		baseDir := filepath.Join(appDataDir, "EDxDC")
-		_ = os.MkdirAll(baseDir, 0755)
 
 		// Logs directory inside baseDir
 		logDir := filepath.Join(baseDir, "logs")
@@ -142,9 +194,6 @@ func onReady() {
 		})
 
 		log.Infof("Logging to %s", logPath)
-
-		confPath := filepath.Join(baseDir, "main.conf")
-		conf := conf.LoadOrCreateConf(confPath)
 
 		// Calculate number of enabled pages
 		pageCount := 0
