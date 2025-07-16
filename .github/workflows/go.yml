@@ -39,6 +39,9 @@ jobs:
       - name: Create Release Zip
         run: powershell Compress-Archive -Path .\EDxDC -DestinationPath .\EDxDC-v${{ env.VERSION }}-portable-amd64.zip
 
+      - name: Copy EXE to Installer Directory
+        run: Copy-Item -Path .\EDxDC.exe -Destination .\installer\EDxDC.exe
+
       - name: Install Inno Setup
         run: |
           choco install innosetup --no-progress --yes
