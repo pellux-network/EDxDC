@@ -6,6 +6,17 @@
     <description>Update feed for EDxDC application</description>
     <language>en</language>
     <item>
+      <title>Version 1.1.1</title>
+      <sparkle:version>111</sparkle:version>
+      <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+      <sparkle:releaseNotesLink>https://pellux-network.github.io/EDxDC/CHANGELOG.md</sparkle:releaseNotesLink>
+      <description>Small tweaks</description>
+      <pubDate>Mon, 16 Jul 2025 10:30:00 +0000</pubDate>
+      <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.1.1-beta/EDxDC-1.1.1-beta-Setup.exe"
+                 length="0"
+                 type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Version 1.1.0</title>
       <sparkle:version>110</sparkle:version>
       <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
@@ -13,17 +24,6 @@
       <description>Initial installable and updateable release of EDxDC.</description>
       <pubDate>Mon, 16 Jul 2025 07:30:00 +0000</pubDate>
       <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.1.0-beta/EDxDC-1.1.0-beta-Setup.exe"
-                 length="0"
-                 type="application/octet-stream"/>
-    </item>
-    <item>
-      <title>Version 1.1.1</title>
-      <sparkle:version>111</sparkle:version>
-      <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
-      <sparkle:releaseNotesLink>https://pellux-network.github.io/EDxDC/CHANGELOG.md</sparkle:releaseNotesLink>
-      <description>Small tweaks</description>
-      <pubDate>Mon, 16 Jul 2025 10:10:00 +0000</pubDate>
-      <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.1.1-beta/EDxDC-1.1.1-beta-Setup.exe"
                  length="0"
                  type="application/octet-stream"/>
     </item>
