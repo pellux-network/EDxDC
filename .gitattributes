@@ -6,6 +6,7 @@
 
 # Ignore all PowerShell scripts from language stats
 *.ps1 linguist-vendored
+*.iss linguist-vendored
 
 # Standard to msysgit
 *.doc	 diff=astextplain
