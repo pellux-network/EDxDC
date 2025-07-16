@@ -71,7 +71,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ./installer/EDxDC-v${{ env.VERSION }}-beta-Setup.exe
+            ./installer/EDxDC-v${{ env.VERSION }}-Setup.exe
             ./EDxDC-v${{ env.VERSION }}-portable-amd64.zip
           tag_name: ${{ env.TAG_NAME }}
         env:
