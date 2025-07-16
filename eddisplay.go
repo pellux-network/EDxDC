@@ -29,7 +29,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "v0.1.0-beta"
+const AppVersion = "v1.1.0-beta"
 
 func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
@@ -85,8 +85,6 @@ func main() {
 		winsparkle.SetAppcastURL("https://pellux-network.github.io/EDxDC/appcast.xml")
 		winsparkle.SetAppDetails("pellux-network.github.io/EDxDC", "EDxDC", AppVersion)
 		winsparkle.SetAutomaticCheckForUpdates(appConf.CheckForUpdates)
-		// Optional: Set DSA public key if you use signatures
-		// _ = winsparkle.SetEdDSAPublicKey("YOUR_PUBLIC_KEY")
 
 		winsparkle.Init()
 		defer winsparkle.Cleanup()

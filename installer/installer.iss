@@ -1,11 +1,11 @@
 [Setup]
 AppName=EDxDC
 AppId=Pellux-Network.EDxDC
-AppVersion=1.0.0-beta
+AppVersion=1.1.0-beta
 DefaultDirName={code:GetInstallDir}
 DefaultGroupName=EDxDC
 OutputDir=.
-OutputBaseFilename=EDxDC-1.0.0-beta-Setup
+OutputBaseFilename=EDxDC-v1.1.0-beta-Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -57,7 +57,7 @@ procedure InitializeUninstallProgressForm;
 var
   UserChoice: Integer;
 begin
-  UserChoice := MsgBox('Do you want to keep the logs folder and conf.yaml?', mbConfirmation, MB_YESNOCANCEL);
+  UserChoice := MsgBox('Do you want to keep the logs folder and main.conf?', mbConfirmation, MB_YESNOCANCEL);
   if UserChoice = IDYES then begin
     RetainLogs := True;
     RetainConf := True;
@@ -73,7 +73,7 @@ begin
     if not RetainLogs then
       DelTree(ExpandConstant('{userappdata}\EDxDC\logs'), True, True, True);
     if not RetainConf then
-      DeleteFile(ExpandConstant('{userappdata}\EDxDC\conf.yaml'));
+      DeleteFile(ExpandConstant('{userappdata}\EDxDC\main.conf'));
     // If neither logs nor conf are retained, remove the whole directory
     if (not RetainLogs) and (not RetainConf) then
       DelTree(ExpandConstant('{userappdata}\EDxDC'), True, True, True);
