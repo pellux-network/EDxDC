@@ -7,9 +7,19 @@
     <img src="https://img.shields.io/github/license/pellux-network/EDxDC" alt="License"/>
     <img src="https://img.shields.io/github/go-mod/go-version/pellux-network/EDxDC?logo=go&logoSize=auto&label=%20&color=grey" alt="Go Version"/>
     <img src="https://img.shields.io/github/actions/workflow/status/pellux-network/EDxDC/go.yml" alt="Build Status"/>
-    <img src="https://img.shields.io/github/issues/pellux-network/EDxDC" alt="GitHub Issues"/>
-    <img src="https://img.shields.io/github/issues-pr/pellux-network/EDxDC" alt="GitHub Pull Requests"/>
-  </p>
+    <a href="https://github.com/pellux-network/EDxDC/issues">
+      <img src="https://img.shields.io/github/issues/pellux-network/EDxDC" alt="GitHub Issues"/>
+    </a>
+    <a href="https://github.com/pellux-network/EDxDC/pulls">
+      <img src="https://img.shields.io/github/issues-pr/pellux-network/EDxDC" alt="GitHub Pull Requests"/>
+    </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/pellux-network/EDxDC/releases/latest">
+    <img src="https://img.shields.io/badge/Download%20Latest%20Release-blue?style=for-the-badge&logo=github" alt="Download Latest Release"/>
+  </a>
+</p>
 
 # Elite Dangerous E*x*ternal Display Controller
 
@@ -21,7 +31,15 @@ Seamlessly reads Elite Dangerous journal data and presents real-time system, pla
 
 ## Getting Started
 
-Simply download the latest release zip from the [Releases](https://github.com/pellux-network/EDxDC/releases/latest) page. Unzip it into a location of your choosing such as `C:\Games\`. If you haven't modified Elite Dangerous' journal path and don't want to disable any pages, simply run the included `.exe` and your MFD should immediately begin loading.
+To install EDxDC, you have two options:
+
+1. **Installer (Recommended):**  
+   Download and run the latest `EDxDC-vX.X.X-[ReleaseType]-Setup.exe` from the [Releases](https://github.com/pellux-network/EDxDC/releases/latest) page. This will install the application and create shortcuts for easy access.
+
+2. **Portable:**  
+   Alternatively, download the latest `EDxDC-vX.X.X-[ReleaseType]-portable-amd64.zip` from the [Releases](https://github.com/pellux-network/EDxDC/releases/latest) page. Unzip it into a location of your choosing such as `C:\Games\`. Then run the included `.exe` directly.
+
+If you haven't modified Elite Dangerous' journal path and don't want to disable any pages, simply run the app and your MFD should immediately begin loading.
 
 If your journal file location is different than the default or you wish to disable any pages, check the [Configuration](link) page on the [Wiki](https://github.com/pellux-network/EDxDC/wiki) for more details.
 
