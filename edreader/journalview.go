@@ -128,7 +128,7 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 	}
 	if state.ArrivedAtFSDTarget {
 		page.Add("################")
-		page.Add("  You have arrived  ")
+		page.Add(" You have arrived ")
 		page.Add("################")
 		return
 	}
