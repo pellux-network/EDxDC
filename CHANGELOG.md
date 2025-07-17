@@ -14,9 +14,7 @@
 
 ### Features
 
-* Add installer for traditional Windows install option ([#9](https://github.com/pellux-network/EDxDC/issues/9)) ([af3f0d2](https://github.com/pellux-network/EDxDC/commit/af3f0d29175a7fec343f6b74f6d79e3fa0847a39))
-* added installer and auto-updating ([71b630e](https://github.com/pellux-network/EDxDC/commit/71b630e9f19e42548b5580ccc0dbc0fe7093546e))
-* completed initial installer work ([#9](https://github.com/pellux-network/EDxDC/issues/9)) ([9a36bc6](https://github.com/pellux-network/EDxDC/commit/9a36bc67d635291eea3076e7a4eec2a0fa74c5e1))
+* added installer for traditional Windows install option ([#9](https://github.com/pellux-network/EDxDC/issues/9)) ([af3f0d2](https://github.com/pellux-network/EDxDC/commit/af3f0d29175a7fec343f6b74f6d79e3fa0847a39))
 
 
 ### Bug Fixes

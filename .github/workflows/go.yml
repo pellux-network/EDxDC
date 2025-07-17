@@ -13,6 +13,9 @@ jobs:
   build-and-release:
     runs-on: windows-latest
     steps:
+      - name: Wait for tag propagation
+        run: Start-Sleep -Seconds 60
+
       - name: Checkout code
         uses: actions/checkout@v4
 
