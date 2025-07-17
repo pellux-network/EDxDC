@@ -22,18 +22,21 @@ jobs:
       - name: Fetch all tags
         run: git fetch --tags
 
-      - name: Extract version from latest tag
+      - name: Extract version from release tag
         id: get_version
         run: |
-          $tags = git tag --sort=-creatordate
-          if (-not $tags) {
-            Write-Error "No git tags found. Please create a tag before running this workflow."
-            exit 1
+          $tag = "${{ github.event.release.tag_name }}"
+          if (-not $tag) {
+            Write-Host "No tag found in release event, falling back to latest tag from git."
+            $tag = git describe --tags --abbrev=0
+            if (-not $tag) {
+              Write-Error "No tags found in repository."
+              exit 1
+            }
           }
-          $latestTag = ($tags -split "`n")[0]
-          $version = $latestTag -replace '^v', ''
+          $version = $tag
           echo "VERSION=$version" >> $env:GITHUB_ENV
-          echo "TAG_NAME=$latestTag" >> $env:GITHUB_ENV
+          echo "TAG_NAME=$tag" >> $env:GITHUB_ENV
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -52,7 +55,7 @@ jobs:
         run: New-Item -Path .\EDxDC\.portable -ItemType File
 
       - name: Create Release Zip
-        run: powershell Compress-Archive -Path .\EDxDC -DestinationPath .\EDxDC-v${{ env.VERSION }}-portable-amd64.zip
+        run: powershell Compress-Archive -Path .\EDxDC -DestinationPath .\EDxDC-${{ env.VERSION }}-portable-amd64.zip
 
       - name: Copy Files to Installer Directory
         run: |
@@ -70,12 +73,12 @@ jobs:
         run: |
           & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer\installer.iss
 
-      - name: Upload Release Assets
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            ./installer/EDxDC-v${{ env.VERSION }}-Setup.exe
-            ./EDxDC-v${{ env.VERSION }}-portable-amd64.zip
-          tag_name: ${{ env.TAG_NAME }}
+      - name: Upload Release Artifact (portable)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ env.TAG_NAME }} ./EDxDC-${{ env.VERSION }}-portable-amd64.zip --clobber
+
+      - name: Upload Release Artifact (installer)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ env.TAG_NAME }} ./installer/EDxDC-${{ env.VERSION }}-Setup.exe --clobber
