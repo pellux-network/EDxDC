@@ -50,10 +50,10 @@ func CheckForUpdate(currentVersion string) {
 	latest := strings.TrimPrefix(release.TagName, "v")
 	current := strings.TrimPrefix(currentVersion, "v")
 	if latest != "" && latest != current {
-		log.Infof("A new version is available: %s (current: %s). Download at: %s", release.TagName, currentVersion, release.HTMLURL)
-		showUpdatePopup(release.TagName, release.HTMLURL, currentVersion, release)
+		log.Infof("A new version is available: %s (current: v%s). Download at: %s", release.TagName, current, release.HTMLURL)
+		showUpdatePopup(release.TagName, release.HTMLURL, "v"+current, release)
 	} else {
-		log.Infof("You are running the latest version: %s", currentVersion)
+		log.Infof("You are running the latest version: v%s", current)
 	}
 }
 
