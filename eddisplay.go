@@ -29,7 +29,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "v1.1.1-beta"
+const AppVersion = "1.2.0-beta"
 
 func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
@@ -87,7 +87,7 @@ func main() {
 		winsparkle.SetAutomaticCheckForUpdates(appConf.CheckForUpdates)
 
 		winsparkle.Init()
-		defer winsparkle.Cleanup()
+		winsparkle.CheckUpdateWithoutUI()
 	} else {
 		fmt.Println("Portable mode detected: using manual update function.")
 	}
@@ -125,14 +125,26 @@ func onReady(isPortable bool, conf conf.Conf) {
 	// Show notification on successful start
 	_ = zenity.Notify("EDxDC has started successfully.", zenity.Title("EDxDC"))
 
+	mCheckUpdate := systray.AddMenuItem("Check for Updates", "Check for updates to EDxDC")
 	mAbout := systray.AddMenuItem("About", "About EDxDC")
 	systray.AddSeparator()
 	mQuit := systray.AddMenuItem("Quit", "Quit EDxDC")
 
 	// Check for updates at startup
 	if isPortable {
-		CheckForUpdate(AppVersion) // Manual update function
+		CheckForUpdate("v" + AppVersion) // Manual update function
 	}
+
+	// Handle Check for Updates menu click
+	go func() {
+		for range mCheckUpdate.ClickedCh {
+			if isPortable {
+				CheckForUpdate("v" + AppVersion)
+			} else {
+				winsparkle.CheckUpdateWithUI()
+			}
+		}
+	}()
 
 	// Handle About menu click
 	go func() {
@@ -220,6 +232,7 @@ func onReady(isPortable bool, conf conf.Conf) {
 
 func onExit() {
 	// Cleanup tasks if needed
+	defer winsparkle.Cleanup()
 }
 
 // getIcon returns an icon as []byte. Replace with your own icon if desired.
@@ -228,6 +241,6 @@ func getIcon() []byte {
 }
 
 func showAboutDialog() {
-	aboutText := fmt.Sprintf("EDxDC %s\n\nSeamlessly reads Elite Dangerous journal data and presents real-time system, planet, cargo, and other information on your Saitek/Logitech X52 Pro Multi-Function Display.\n\n© Pellux Network", AppVersion)
+	aboutText := fmt.Sprintf("EDxDC v%s\n\nSeamlessly reads Elite Dangerous journal data and presents real-time system, planet, cargo, and other information on your Saitek/Logitech X52 Pro Multi-Function Display.\n\n© Pellux Network", AppVersion)
 	_ = zenity.Info(aboutText, zenity.Title("About EDxDC"))
 }
