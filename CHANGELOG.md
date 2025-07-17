@@ -2,6 +2,13 @@
 
 ## EDxDC Changelog
 
+## [1.2.1-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.0-beta...v1.2.1-beta) (2025-07-17)
+
+
+### Bug Fixes
+
+* fixed line issues and updated rendering ([#24](https://github.com/pellux-network/EDxDC/issues/24)) ([0eef7c3](https://github.com/pellux-network/EDxDC/commit/0eef7c3e0c24d0c764d6b37c641931d4df1299ca))
+
 ## [1.2.0-beta](https://github.com/pellux-network/EDxDC/compare/v1.1.1-beta...v1.2.0-beta) (2025-07-17)
 
 
