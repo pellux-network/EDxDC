@@ -39,6 +39,7 @@ func GetEDSMSystemValue(systemaddress int64) (*edsm.System, error) {
 
 // Helper to render a station page
 func RenderStationPage(page *mfd.Page, header string, st edsm.Station) {
+	lines := []string{}
 	// Map allegiance to abbreviation
 	abbr := map[string]string{
 		"Federation":  "FED",
@@ -51,14 +52,18 @@ func RenderStationPage(page *mfd.Page, header string, st edsm.Station) {
 	if alg == "" {
 		alg = st.Allegiance // fallback to raw if not mapped
 	}
-	page.Add(lcdformat.SpaceBetween(16, header, alg))
-	page.Add(st.Name)
-	page.Add(st.Type)
+	lines = append(lines, lcdformat.SpaceBetween(16, header, alg))
+	lines = append(lines, st.Name)
+	lines = append(lines, st.Type)
+	for _, line := range lines {
+		page.Add(line)
+	}
 }
 
 // Helper to render a Fleet Carrier page
 func RenderFleetCarrierPage(page *mfd.Page, header, fcID, fcName string, systemAddress int64) {
-	// Try to get EDSM station info for type (always "Fleet Carrier" but future-proof)
+	lines := []string{}
+	// Try to get EDSM station info for type
 	stType := "Fleet Carrier"
 	stations, err := edsm.GetSystemStations(systemAddress)
 	if err == nil {
@@ -69,14 +74,17 @@ func RenderFleetCarrierPage(page *mfd.Page, header, fcID, fcName string, systemA
 			}
 		}
 	}
-	page.Add(lcdformat.SpaceBetween(16, header, fcID))
-	page.Add(fcName)
-	page.Add(stType)
+	lines = append(lines, lcdformat.SpaceBetween(16, header, fcID))
+	lines = append(lines, fcName)
+	lines = append(lines, stType)
+	for _, line := range lines {
+		page.Add(line)
+	}
 }
 
 // Page rendering functions for MFD
 func RenderLocationPage(page *mfd.Page, state Journalstate) {
-	// --- Fleet Carrier: CURR FC page ---
+	// Fleet Carrier: CURR FC page
 	if state.Type == LocationDocked && state.Location.Body != "" && state.BodyType == "Station" {
 		// Try to detect if docked at FC
 		// state.Location.Body = StationName (FC ID), state.Location.SystemAddress
@@ -100,7 +108,7 @@ func RenderLocationPage(page *mfd.Page, state Journalstate) {
 			RenderFleetCarrierPage(page, "CURR FC", fcID, fcName, state.Location.SystemAddress)
 			return
 		}
-		// ...existing code for normal stations...
+		// for normal stations
 		stations, err = edsm.GetSystemStations(state.Location.SystemAddress)
 		if err == nil {
 			for _, st := range stations {
@@ -115,21 +123,28 @@ func RenderLocationPage(page *mfd.Page, state Journalstate) {
 	if state.Type == LocationPlanet || state.Type == LocationLanded {
 		ApplyBodyPage(page, "CURR BODY", state.Location.SystemAddress, state.Location.BodyID, state.Location.Body)
 	} else {
-		ApplySystemPage(page, "CURR SYSTEM", state.Location.StarSystem, state.Location.SystemAddress, &state)
+		ApplySystemPage(page, "CURR SYS", state.Location.StarSystem, state.Location.SystemAddress, &state)
 	}
 }
 
 func RenderDestinationPage(page *mfd.Page, state Journalstate) {
+	lines := []string{}
 	if state.ShowSplashScreen {
-		page.Add("################")
-		page.Add("EDxDC v1.2.0-beta")
-		page.Add("################")
+		lines = append(lines, "################")
+		lines = append(lines, "EDxDC v1.2.0-beta")
+		lines = append(lines, "################")
+		for _, line := range lines {
+			page.Add(line)
+		}
 		return
 	}
 	if state.ArrivedAtFSDTarget {
-		page.Add("################")
-		page.Add(" You have arrived ")
-		page.Add("################")
+		lines = append(lines, "################")
+		lines = append(lines, " You have arrived ")
+		lines = append(lines, "################")
+		for _, line := range lines {
+			page.Add(line)
+		}
 		return
 	}
 
@@ -138,7 +153,7 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 		state.Destination.SystemAddress == state.Location.SystemAddress &&
 		state.Destination.Name != "" {
 
-		// --- Fleet Carrier: TGT FC page ---
+		// Fleet Carrier: TGT FC page
 		// Try to parse FC name/id from destination name
 		fcName, fcID := ExtractFleetCarrierNameID(state.Destination.Name)
 		if fcID != "" {
@@ -170,16 +185,25 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 					ApplyBodyPage(page, "TGT BODY", state.Location.SystemAddress, state.Destination.BodyID, state.Destination.Name)
 					return
 				default:
-					page.Add(lcdformat.SpaceBetween(16, "TGT BODY", state.Destination.Name))
+					lines = append(lines, lcdformat.SpaceBetween(16, "TGT BODY", ""))
+					lines = append(lines, state.Destination.Name)
 					if body.SubType != "" {
-						page.Add(body.SubType)
+						lines = append(lines, body.SubType)
+					}
+					for _, line := range lines {
+						page.Add(line)
 					}
 					return
 				}
 			}
 		}
 		// Fallback if EDSM fails or no BodyID
-		page.Add(lcdformat.SpaceBetween(16, "TGT BODY", state.Destination.Name))
+		lines = append(lines, lcdformat.SpaceBetween(16, "TGT BODY", ""))
+		lines = append(lines, state.Destination.Name)
+		// No type info available in this fallback
+		for _, line := range lines {
+			page.Add(line)
+		}
 		return
 	}
 
@@ -189,7 +213,10 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 		return
 	}
 
-	page.Add(" No Destination ")
+	lines = append(lines, " No Destination ")
+	for _, line := range lines {
+		page.Add(line)
+	}
 }
 
 func RenderCargoPage(page *mfd.Page, _ Journalstate) {
@@ -222,7 +249,6 @@ func RenderCargoPage(page *mfd.Page, _ Journalstate) {
 	for _, line := range currentCargo.Inventory {
 		lines = append(lines, lcdformat.SpaceBetween(16, line.displayname(), printer.Sprintf("%d", line.Count)))
 	}
-	// Add all pages in slice to the MFD
 	for _, line := range lines {
 		page.Add(line)
 	}
@@ -250,7 +276,7 @@ func ApplySystemPage(page *mfd.Page, header, systemname string, systemaddress in
 	// Separate the header (classification) and header display
 	newHeader := header
 	// Format the header based on the header title
-	if header == "NEXT JUMP" || header == "CURR SYSTEM" {
+	if header == "NEXT JUMP" || header == "CURR SYS" {
 		// Add FUEL indicator if star is scoopable
 		if mainBody.IsScoopable {
 
