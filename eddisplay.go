@@ -87,7 +87,6 @@ func main() {
 		winsparkle.SetAutomaticCheckForUpdates(appConf.CheckForUpdates)
 
 		winsparkle.Init()
-		defer winsparkle.Cleanup()
 		winsparkle.CheckUpdateWithoutUI()
 	} else {
 		fmt.Println("Portable mode detected: using manual update function.")
@@ -233,7 +232,7 @@ func onReady(isPortable bool, conf conf.Conf) {
 
 func onExit() {
 	// Cleanup tasks if needed
-	winsparkle.Cleanup()
+	defer winsparkle.Cleanup()
 }
 
 // getIcon returns an icon as []byte. Replace with your own icon if desired.
