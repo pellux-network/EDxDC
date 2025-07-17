@@ -87,6 +87,7 @@ func main() {
 		winsparkle.SetAutomaticCheckForUpdates(appConf.CheckForUpdates)
 
 		winsparkle.Init()
+		defer winsparkle.Cleanup()
 		winsparkle.CheckUpdateWithoutUI()
 	} else {
 		fmt.Println("Portable mode detected: using manual update function.")
