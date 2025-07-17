@@ -2,6 +2,13 @@
 
 ## EDxDC Changelog
 
+## [1.2.0-beta](https://github.com/pellux-network/EDxDC/compare/v1.1.1-beta...v1.2.0-beta) (2025-07-17)
+
+
+### Features
+
+* added automatic updates ([2ec35fa](https://github.com/pellux-network/EDxDC/commit/2ec35fad6ad1f2479992893394d3d56a014805fd))
+
 ## [1.1.1-beta](https://github.com/pellux-network/EDxDC/compare/v1.1.0-beta...v1.1.1-beta) (2025-07-16)
 
 
