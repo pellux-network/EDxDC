@@ -28,7 +28,7 @@ jobs:
           $tag = "${{ github.event.release.tag_name }}"
           if (-not $tag) {
             Write-Host "No tag found in release event, falling back to latest tag from git."
-            $tag = git describe --tags --abbrev=0
+            $tag = git tag --sort=-creatordate | Select-Object -First 1
             if (-not $tag) {
               Write-Error "No tags found in repository."
               exit 1
