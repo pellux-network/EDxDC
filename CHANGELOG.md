@@ -2,6 +2,13 @@
 
 ## EDxDC Changelog
 
+## [1.2.2-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.1-beta...v1.2.2-beta) (2025-07-21)
+
+
+### Bug Fixes
+
+* app process should no longer sometimes hang when closed ([#29](https://github.com/pellux-network/EDxDC/issues/29)) ([5d0b591](https://github.com/pellux-network/EDxDC/commit/5d0b59180c125a73319a92f4e3b3e1b2583b5905))
+
 ## [1.2.1-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.0-beta...v1.2.1-beta) (2025-07-17)
 
 
