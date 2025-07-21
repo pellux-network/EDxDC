@@ -4,8 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -113,10 +115,22 @@ func main() {
 		os.Exit(0)
 	}
 
-	systray.Run(func() { onReady(isPortable, appConf) }, onExit)
+	// Use a quit channel to coordinate shutdown
+	quitCh := make(chan struct{})
+
+	// Setup signal handling for graceful shutdown (works in most terminals)
+	sigCh := make(chan os.Signal, 1)
+	signal.Notify(sigCh, os.Interrupt, syscall.SIGTERM)
+
+	go func() {
+		<-sigCh
+		close(quitCh)
+	}()
+
+	systray.Run(func() { onReady(quitCh, isPortable, appConf) }, onExit)
 }
 
-func onReady(isPortable bool, conf conf.Conf) {
+func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 	// Set up systray icon and menu
 	systray.SetIcon(getIcon()) // You can provide your own icon as []byte
 	systray.SetTitle("EDxDC")
@@ -155,13 +169,6 @@ func onReady(isPortable bool, conf conf.Conf) {
 
 	// Start your main logic in a goroutine
 	go func() {
-		defer func() {
-			// Attempt to catch any crash messages before the cmd window closes
-			if r := recover(); r != nil {
-				log.Warnln("Crashed with message")
-				log.Warnln(r)
-			}
-		}()
 		var logLevelArg string
 		flag.StringVar(&logLevelArg, "log", "trace", "Desired log level. One of [panic, fatal, error, warning, info, debug, trace]. Default: trace.")
 
@@ -224,8 +231,13 @@ func onReady(isPortable bool, conf conf.Conf) {
 		edreader.Start(conf)
 		defer edreader.Stop()
 
-		// Wait for quit
-		<-mQuit.ClickedCh
+		// Wait for either menu quit or OS signal
+		select {
+		case <-mQuit.ClickedCh:
+			// User clicked Quit
+		case <-quitCh:
+			// OS signal received
+		}
 		systray.Quit()
 	}()
 }
