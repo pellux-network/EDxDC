@@ -31,7 +31,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "1.2.1-beta"
+const AppVersion = "1.2.2-beta"
 
 func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
