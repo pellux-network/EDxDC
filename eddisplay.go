@@ -31,7 +31,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "1.2.2-beta"
+const AppVersion = "1.2.1-beta"
 
 func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
 	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
@@ -126,6 +126,11 @@ func main() {
 		<-sigCh
 		close(quitCh)
 	}()
+
+	// Register WinSparkle shutdown callback to trigger clean shutdown
+	winsparkle.SetShutdownRequestCallback(func() {
+		close(quitCh)
+	})
 
 	systray.Run(func() { onReady(quitCh, isPortable, appConf) }, onExit)
 }
@@ -231,12 +236,12 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 		edreader.Start(conf)
 		defer edreader.Stop()
 
-		// Wait for either menu quit or OS signal
+		// Wait for either menu quit or OS signal or WinSparkle shutdown
 		select {
 		case <-mQuit.ClickedCh:
 			// User clicked Quit
 		case <-quitCh:
-			// OS signal received
+			// OS signal or WinSparkle shutdown received
 		}
 		systray.Quit()
 	}()
