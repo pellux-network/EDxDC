@@ -6,13 +6,13 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/fsnotify/fsnotify"
 	"github.com/google/go-cmp/cmp"
 	"github.com/pellux-network/EDxDC/conf"
 	"github.com/pellux-network/EDxDC/edsm"
+	"github.com/pellux-network/EDxDC/logging"
 	"github.com/pellux-network/EDxDC/mfd"
+	"github.com/rs/zerolog/log"
 )
 
 // PageKey is a string identifier for each page
@@ -61,9 +61,9 @@ var (
 
 // Start starts the Elite Dangerous journal reader routine using fsnotify
 func Start(cfg conf.Conf) {
-	log.Info("Starting journal listener")
+	log.Info().Msg("Starting journal listener")
 	journalfolder := cfg.ExpandJournalFolderPath()
-	log.Debugln("Looking for journal files in " + journalfolder)
+	log.Debug().Str("journalfolder", logging.CleanPath(journalfolder)).Msg("Looking for journal files")
 
 	// Set the first enabled page key for splash logic
 	SetFirstEnabledPageKey(cfg.Pages)
@@ -73,18 +73,19 @@ func Start(cfg conf.Conf) {
 	var err error
 	watcher, err = fsnotify.NewWatcher()
 	if err != nil {
-		log.Panicf("Failed to create file watcher: %v", err)
+		log.Fatal().Err(err).Msg("Failed to create file watcher")
 	}
 	stopCh = make(chan struct{})
 
 	// Watch the folder for new/changed files
 	err = watcher.Add(journalfolder)
 	if err != nil {
-		log.Panicf("Failed to add watcher: %v", err)
+		log.Fatal().Err(err).Msg("Failed to add watcher")
 	}
 
 	// Prefetch stations for the initial system (if known)
 	if lastJournalState.Location.SystemAddress != 0 {
+		log.Debug().Int64("systemAddress", lastJournalState.Location.SystemAddress).Msg("Prefetching stations for initial system")
 		PrefetchStations(lastJournalState.Location.SystemAddress)
 	}
 
@@ -93,13 +94,14 @@ func Start(cfg conf.Conf) {
 		for {
 			select {
 			case event := <-watcher.Events:
-				// Only react to writes/creates/renames
+				log.Trace().Str("event", event.String()).Msg("File system event received")
 				if event.Op&(fsnotify.Write|fsnotify.Create|fsnotify.Rename) != 0 {
 					updateMFD(journalfolder, cfg)
 				}
 			case err := <-watcher.Errors:
-				log.Warnf("Watcher error: %v", err)
+				log.Warn().Err(err).Msg("Watcher error")
 			case <-stopCh:
+				log.Info().Msg("Journal watcher stopped")
 				return
 			}
 		}
@@ -108,6 +110,7 @@ func Start(cfg conf.Conf) {
 
 func updateMFD(journalfolder string, cfg conf.Conf) {
 	journalFile := findJournalFile(journalfolder)
+	log.Debug().Str("journalFile", logging.CleanPath(journalFile)).Msg("Updating MFD")
 	handleJournalFile(journalFile)
 	handleStatusFile(filepath.Join(journalfolder, "Status.json"))
 	handleModulesInfoFile(filepath.Join(journalfolder, FileModulesInfo))
@@ -159,6 +162,7 @@ func findJournalFile(folder string) string {
 			mostRecentJournal = filename
 		}
 	}
+	log.Debug().Str("mostRecentJournal", logging.CleanPath(mostRecentJournal)).Msg("Found most recent journal file")
 	return mostRecentJournal
 }
 

@@ -10,6 +10,7 @@ require (
 	github.com/google/go-cmp v0.7.0
 	github.com/ncruces/zenity v0.10.14
 	github.com/pbxx/goLCDFormat v1.0.2
+	github.com/rs/zerolog v1.34.0
 	github.com/sirupsen/logrus v1.9.3
 	golang.org/x/sys v0.34.0
 	golang.org/x/text v0.27.0
@@ -30,6 +31,8 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/josephspurrier/goversioninfo v1.5.0 // indirect
+	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
 	github.com/randall77/makefat v0.0.0-20210315173500-7ddd0e42c844 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect

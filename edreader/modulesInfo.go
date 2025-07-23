@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"os"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/pellux-network/EDxDC/logging"
+	"github.com/rs/zerolog/log"
 )
 
 const FileModulesInfo = "ModulesInfo.json"
@@ -26,10 +27,9 @@ var currentCargoCapacity int // NEW: updated from Loadout event
 func handleModulesInfoFile(file string) {
 	data, err := os.ReadFile(file)
 	if err != nil {
-		log.Errorln(err)
+		log.Warn().Err(err).Str("file", logging.CleanPath(file)).Msg("Failed to read ModulesInfo file")
 		return
 	}
-
 	json.Unmarshal(data, &currentModules)
 }
 
