@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 /*
@@ -145,7 +145,7 @@ func ClearCache() {
 	cachelock.Lock()
 	defer cachelock.Unlock()
 	sysinfocache = make(map[string]System)
-	log.Debugln("Cached EDSM information cleared")
+	log.Debug().Msg("Cached EDSM information cleared")
 }
 
 // GetSystemBodies retrieves body information from EDSM.net
@@ -167,7 +167,7 @@ var stationCache = struct {
 }{data: make(map[int64][]Station)}
 
 func getBodyInfo(url string, id64 int64) <-chan SystemResult {
-	log.Traceln("getBodyInfo", url, id64)
+	log.Trace().Str("url", url).Int64("id64", id64).Msg("getBodyInfo called")
 	retchan := make(chan SystemResult)
 	go func() {
 		sysurl := fmt.Sprintf(url, id64)
@@ -177,20 +177,22 @@ func getBodyInfo(url string, id64 int64) <-chan SystemResult {
 		cachelock.RUnlock()
 
 		if ok {
-			log.Trace("system info found in cache")
+			log.Trace().Str("sysurl", sysurl).Msg("system info found in cache")
 			retchan <- SystemResult{cached, nil}
 			return
 		}
-		log.Debugln("Requesting information from EDSM: " + sysurl)
+		log.Debug().Str("sysurl", sysurl).Msg("Requesting information from EDSM")
 		resp, err := http.Get(fmt.Sprintf(url, id64))
 		s := System{Bodies: []Body{}}
 		if err != nil {
+			log.Warn().Err(err).Str("sysurl", sysurl).Msg("Failed to fetch EDSM info")
 			retchan <- SystemResult{s, err}
 			return
 		}
 		defer resp.Body.Close()
 		data, err := io.ReadAll(resp.Body)
 		if err != nil {
+			log.Warn().Err(err).Str("sysurl", sysurl).Msg("Failed to read EDSM response")
 			retchan <- SystemResult{s, err}
 			return
 		}

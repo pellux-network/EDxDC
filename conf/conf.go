@@ -15,6 +15,7 @@ type Conf struct {
 	JournalsFolder  string          `yaml:"journalsfolder"`
 	Pages           map[string]bool `yaml:"pages"`
 	CheckForUpdates bool            `yaml:"checkforupdates"`
+	Loglevel        string          `json:"loglevel" yaml:"loglevel"`
 }
 
 // LoadOrCreateConf loads the config from the given path, or creates a default one if missing.
@@ -33,6 +34,7 @@ pages:
   cargo: true
 
 checkforupdates: true
+loglevel: info
 `
 		_ = os.MkdirAll(filepath.Dir(confPath), 0755)
 		if err := os.WriteFile(confPath, []byte(defaultYAML), 0644); err != nil {

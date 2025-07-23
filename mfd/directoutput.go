@@ -4,7 +4,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -75,9 +75,9 @@ func callProc(procname string, args ...uintptr) {
 	case S_OK:
 		return
 	case E_PAGENOTACTIVE:
-		log.Warnf("hresult %x (E_PAGENOTACTIVE)\n", hresult)
+		log.Warn().Uint64("hresult", uint64(hresult)).Msg("E_PAGENOTACTIVE")
 	default:
-		log.Warnf("hresult %x\n", hresult)
-		log.Fatalln(err)
+		log.Warn().Uint64("hresult", uint64(hresult)).Msg("DirectOutput call failed")
+		log.Fatal().Err(err).Msg("DirectOutput fatal error")
 	}
 }

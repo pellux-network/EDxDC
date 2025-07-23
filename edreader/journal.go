@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/buger/jsonparser"
+	"github.com/pellux-network/EDxDC/logging"
+	"github.com/rs/zerolog/log"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )
@@ -199,11 +199,12 @@ func SetFirstEnabledPageKey(cfg map[string]bool) {
 // handleJournalFile reads only new lines from the journal file since the last read.
 func handleJournalFile(filename string) {
 	if filename == "" {
+		log.Warn().Msg("No journal file specified")
 		return
 	}
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Warnln("Error opening journal file ", filename, err)
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error opening journal file")
 		return
 	}
 	defer file.Close()
@@ -215,7 +216,7 @@ func handleJournalFile(filename string) {
 
 	info, err := file.Stat()
 	if err != nil {
-		log.Warnln("Error stating journal file ", filename, err)
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error stating journal file")
 		return
 	}
 
@@ -226,7 +227,7 @@ func handleJournalFile(filename string) {
 
 	_, err = file.Seek(offset, 0)
 	if err != nil {
-		log.Warnln("Error seeking journal file ", filename, err)
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error seeking journal file")
 		return
 	}
 
@@ -240,6 +241,7 @@ func handleJournalFile(filename string) {
 	}
 	if linesRead > 0 {
 		lastJournalState = state // Only update if new lines were read
+		log.Debug().Int("linesRead", linesRead).Str("filename", logging.CleanPath(filename)).Msg("Processed new journal lines")
 	}
 
 	// Save offset for next time
@@ -253,16 +255,19 @@ func handleJournalFile(filename string) {
 // handleStatusFile reads Status.json for the current destination
 func handleStatusFile(filename string) {
 	if filename == "" {
+		log.Warn().Msg("No status file specified")
 		return
 	}
 	file, err := os.Open(filename)
 	if err != nil {
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error opening status file")
 		return
 	}
 	defer file.Close()
 
 	info, err := file.Stat()
 	if err != nil {
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error stating status file")
 		return
 	}
 	if info.Size() == lastStatusFileSize {
@@ -272,6 +277,7 @@ func handleStatusFile(filename string) {
 
 	data, err := io.ReadAll(file)
 	if err != nil {
+		log.Warn().Err(err).Str("filename", logging.CleanPath(filename)).Msg("Error reading status file")
 		return
 	}
 

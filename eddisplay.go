@@ -6,12 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"strings"
 	"syscall"
 	"time"
 
-	log "github.com/sirupsen/logrus"
-	"gopkg.in/natefinch/lumberjack.v2"
+	"github.com/pellux-network/EDxDC/logging"
+	"github.com/rs/zerolog/log"
 
 	_ "embed"
 
@@ -32,14 +31,6 @@ type TextLogFormatter struct{}
 var iconData []byte
 
 const AppVersion = "1.2.2-beta"
-
-func (f *TextLogFormatter) Format(entry *log.Entry) ([]byte, error) {
-	timestamp := time.Now().UTC().Format("2006-01-02 15:04:05")
-	level := entry.Level.String()
-	message := entry.Message
-
-	return []byte(timestamp + " - " + strings.ToUpper(level) + " - " + message + "\n"), nil
-}
 
 func cleanupOldUpdaters() {
 	tmpDir := filepath.Join(os.TempDir(), "EDxDC")
@@ -82,6 +73,10 @@ func main() {
 	confPath := filepath.Join(baseDir, "main.conf")
 	appConf := conf.LoadOrCreateConf(confPath)
 
+	// Initialize logging before anything else
+	logging.Init(baseDir, appConf.Loglevel)
+	log.Info().Str("config", logging.CleanPath(confPath)).Msg("Loaded configuration")
+
 	if !isPortable {
 		// WinSparkle setup
 		winsparkle.SetAppcastURL("https://pellux-network.github.io/EDxDC/appcast.xml")
@@ -90,15 +85,16 @@ func main() {
 
 		winsparkle.Init()
 		winsparkle.CheckUpdateWithoutUI()
+		log.Info().Msg("WinSparkle initialized for updates")
 	} else {
-		fmt.Println("Portable mode detected: using manual update function.")
+		log.Info().Msg("Portable mode detected: using manual update function.")
 	}
 
 	cleanupOldUpdaters()
 
 	if len(os.Args) > 1 && os.Args[1] == "run-updater" {
 		if len(os.Args) < 5 {
-			fmt.Println("Usage: run-updater oldDir newExe newDir [logFile]")
+			log.Error().Msg("Usage: run-updater oldDir newExe newDir [logFile]")
 			os.Exit(1)
 		}
 		oldDir := os.Args[2]
@@ -108,8 +104,9 @@ func main() {
 		if len(os.Args) > 5 {
 			logFile = os.Args[5]
 		}
+		log.Info().Str("oldDir", oldDir).Str("newExe", newExe).Str("newDir", newDir).Str("logFile", logFile).Msg("Running updater")
 		if err := RunUpdaterWithLog(oldDir, newExe, newDir, logFile); err != nil {
-			fmt.Println("Updater error:", err)
+			log.Error().Err(err).Msg("Updater error")
 			os.Exit(1)
 		}
 		os.Exit(0)
@@ -154,6 +151,8 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 		CheckForUpdate("v" + AppVersion) // Manual update function
 	}
 
+	log.Info().Msg("Systray ready, application started")
+
 	// Handle Check for Updates menu click
 	go func() {
 		for range mCheckUpdate.ClickedCh {
@@ -178,26 +177,21 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 		flag.StringVar(&logLevelArg, "log", "trace", "Desired log level. One of [panic, fatal, error, warning, info, debug, trace]. Default: trace.")
 
 		flag.Parse()
-		logLevel, err := log.ParseLevel(logLevelArg)
-		if err != nil {
-			log.Panic(err)
-		}
-
-		log.SetLevel(logLevel)
-		log.SetFormatter(&TextLogFormatter{})
+		log.Info().Str("level", conf.Loglevel).Msg("Setting log level")
+		logging.SetLevel(conf.Loglevel)
 
 		// Use app directory for config and logs in portable mode, otherwise use %APPDATA%\EDxDC
 		var baseDir string
 		if isPortable {
 			exePath, err := os.Executable()
 			if err != nil {
-				log.Fatalln("Could not determine executable path:", err)
+				log.Fatal().Err(err).Msg("Could not determine executable path")
 			}
 			baseDir = filepath.Dir(exePath)
 		} else {
 			appDataDir, err := os.UserConfigDir()
 			if err != nil {
-				log.Fatalln("Could not determine user config dir:", err)
+				log.Fatal().Err(err).Msg("Could not determine user config dir")
 			}
 			baseDir = filepath.Join(appDataDir, "EDxDC")
 			_ = os.MkdirAll(baseDir, 0755)
@@ -209,15 +203,7 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 		logFileName := time.Now().Format("2006-01-02_15.04.05") + ".log"
 		logPath := filepath.Join(logDir, logFileName)
 
-		log.SetOutput(&lumberjack.Logger{
-			Filename:   logPath,
-			MaxSize:    10,
-			MaxBackups: 5,
-			MaxAge:     30,
-			Compress:   true,
-		})
-
-		log.Infof("Logging to %s", logPath)
+		log.Info().Str("logfile", logging.CleanPath(logPath)).Msg("Logging to file")
 
 		// Calculate number of enabled pages
 		pageCount := 0
@@ -227,14 +213,16 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 			}
 		}
 
-		err = mfd.InitDevice(uint32(pageCount), edsm.ClearCache)
+		err := mfd.InitDevice(uint32(pageCount), edsm.ClearCache)
 		if err != nil {
-			log.Panic(err)
+			log.Fatal().Err(err).Msg("Failed to initialize MFD device")
 		}
 		defer mfd.DeInitDevice()
 
 		edreader.Start(conf)
 		defer edreader.Stop()
+
+		log.Info().Msg("Main event loop started")
 
 		// Wait for either menu quit or OS signal or WinSparkle shutdown
 		select {
@@ -248,7 +236,7 @@ func onReady(quitCh chan struct{}, isPortable bool, conf conf.Conf) {
 }
 
 func onExit() {
-	// Cleanup tasks if needed
+	log.Info().Msg("Application exiting, cleaning up")
 	defer winsparkle.Cleanup()
 }
 
