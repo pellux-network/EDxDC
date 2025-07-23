@@ -247,7 +247,7 @@ func RenderCargoPage(page *mfd.Page, _ Journalstate) {
 	})
 
 	for _, line := range currentCargo.Inventory {
-		lines = append(lines, lcdformat.SpaceBetween(16, line.displayname(), printer.Sprintf("%d", line.Count)))
+		lines = append(lines, lcdformat.SpaceBetween(16, line.displayname(), fmt.Sprintf("%d", line.Count)))
 	}
 	for _, line := range lines {
 		page.Add(line)
