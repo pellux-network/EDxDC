@@ -2,6 +2,16 @@
 
 ## EDxDC Changelog
 
+## [1.2.3-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.2-beta...v1.2.3-beta) (2025-07-24)
+
+
+### Bug Fixes
+
+* added support for mkii cargo racks ([#36](https://github.com/pellux-network/EDxDC/issues/36)) ([03c8334](https://github.com/pellux-network/EDxDC/commit/03c8334ce911fbf74de81998123e320d7dcc2078))
+* automatic updates can now properly close app ([#31](https://github.com/pellux-network/EDxDC/issues/31)) ([1dab841](https://github.com/pellux-network/EDxDC/commit/1dab841a94a484bf0337de18d97605b4a1469010))
+* removed commas from cargo counts ([#34](https://github.com/pellux-network/EDxDC/issues/34)) ([f594695](https://github.com/pellux-network/EDxDC/commit/f59469527eb11bf45afc49cd082aec67f151dcba))
+* vastly improved logging ([#35](https://github.com/pellux-network/EDxDC/issues/35)) ([e867846](https://github.com/pellux-network/EDxDC/commit/e867846be80f5da8e1368ccf08fd6773a6879c42))
+
 ## [1.2.2-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.1-beta...v1.2.2-beta) (2025-07-21)
 
 
