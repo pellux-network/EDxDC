@@ -42,10 +42,11 @@ func RenderStationPage(page *mfd.Page, header string, st edsm.Station) {
 	lines := []string{}
 	// Map allegiance to abbreviation
 	abbr := map[string]string{
-		"Federation":  "FED",
-		"Empire":      "EMP",
-		"Alliance":    "ALLI",
-		"Independent": "IND",
+		"Federation":       "FED",
+		"Empire":           "EMP",
+		"Alliance":         "ALLI",
+		"Independent":      "IND",
+		"PilotsFederation": "PFED",
 	}
 	titleCaser := cases.Title(language.English)
 	alg := abbr[titleCaser.String(strings.ToLower(st.Allegiance))]
