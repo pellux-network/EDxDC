@@ -78,7 +78,9 @@ func ModulesInfoCargoCapacity() int {
 			cargoCapacity += 384
 			log.Debug().Int("added", 384).Int("total", cargoCapacity).Msg("Matched large size8 cargo rack")
 		default:
-			log.Trace().Str("item", line.Item).Msg("Module not counted for cargo capacity")
+			if strings.Contains(line.Item, "cargorack") {
+				log.Trace().Str("item", line.Item).Msg("Unrecognized cargorack module not counted for cargo capacity")
+			}
 		}
 	}
 
