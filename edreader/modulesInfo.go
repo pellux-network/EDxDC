@@ -3,6 +3,7 @@ package edreader
 import (
 	"encoding/json"
 	"os"
+	"strings"
 
 	"github.com/pellux-network/EDxDC/logging"
 	"github.com/rs/zerolog/log"
@@ -28,9 +29,16 @@ func handleModulesInfoFile(file string) {
 	data, err := os.ReadFile(file)
 	if err != nil {
 		log.Warn().Err(err).Str("file", logging.CleanPath(file)).Msg("Failed to read ModulesInfo file")
+		currentModules = ModulesInfo{}
 		return
 	}
-	json.Unmarshal(data, &currentModules)
+	var modules ModulesInfo
+	if err := json.Unmarshal(data, &modules); err != nil {
+		log.Error().Err(err).Str("file", logging.CleanPath(file)).Msg("Failed to unmarshal ModulesInfo file")
+		currentModules = ModulesInfo{}
+		return
+	}
+	currentModules = modules
 }
 
 func ModulesInfoCargoCapacity() int {
