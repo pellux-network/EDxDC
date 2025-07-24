@@ -131,7 +131,7 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 	lines := []string{}
 	if state.ShowSplashScreen {
 		lines = append(lines, "################")
-		lines = append(lines, "EDxDC v1.2.2-beta")
+		lines = append(lines, "EDxDC v1.2.3-beta")
 		lines = append(lines, "################")
 		for _, line := range lines {
 			page.Add(line)
