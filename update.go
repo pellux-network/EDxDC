@@ -15,7 +15,7 @@ import (
 	"time"
 
 	"github.com/ncruces/zenity"
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 const githubRepo = "pellux-network/EDxDC"
@@ -36,24 +36,24 @@ func CheckForUpdate(currentVersion string) {
 	url := fmt.Sprintf("https://api.github.com/repos/%s/releases/latest", githubRepo)
 	resp, err := client.Get(url)
 	if err != nil {
-		log.Warnf("Update check failed: %v", err)
+		log.Warn().Err(err).Msg("Update check failed")
 		return
 	}
 	defer resp.Body.Close()
 
 	var release githubRelease
 	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
-		log.Warnf("Failed to parse update info: %v", err)
+		log.Warn().Err(err).Msg("Failed to parse update info")
 		return
 	}
 
 	latest := strings.TrimPrefix(release.TagName, "v")
 	current := strings.TrimPrefix(currentVersion, "v")
 	if latest != "" && latest != current {
-		log.Infof("A new version is available: %s (current: v%s). Download at: %s", release.TagName, current, release.HTMLURL)
+		log.Info().Str("latest", release.TagName).Str("current", current).Str("url", release.HTMLURL).Msg("A new version is available")
 		showUpdatePopup(release.TagName, release.HTMLURL, "v"+current, release)
 	} else {
-		log.Infof("You are running the latest version: v%s", current)
+		log.Info().Str("current", current).Msg("You are running the latest version")
 	}
 }
 
@@ -288,7 +288,7 @@ func openBrowser(url string) {
 func startUpdater(oldDir, newExe, newDir string) error {
 	exePath, err := os.Executable()
 	if err != nil {
-		fmt.Printf("startUpdater: os.Executable error: %v\n", err)
+		log.Error().Err(err).Msg("startUpdater: os.Executable error")
 		return err
 	}
 	parentDir := filepath.Dir(oldDir)
@@ -323,13 +323,13 @@ func startUpdater(oldDir, newExe, newDir string) error {
 		cmd.Stdout = f
 		cmd.Stderr = f
 	} else {
-		fmt.Printf("Failed to open updater log file: %v\n", err)
+		log.Warn().Err(err).Msg("Failed to open updater log file")
 	}
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	err = cmd.Start()
 	if err != nil {
-		fmt.Printf("startUpdater: cmd.Start error: %v\n", err)
+		log.Error().Err(err).Msg("startUpdater: cmd.Start error")
 	}
 	return err
 }

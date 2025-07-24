@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 const FileCargo = "Cargo.json"
@@ -44,19 +44,23 @@ var (
 )
 
 func init() {
-	log.Debugln("Initializing cargo name map...")
+	log.Debug().Msg("Initializing cargo name map...")
 	initNameMap()
 }
 
 func handleCargoFile(file string) {
 	data, err := os.ReadFile(file)
 	if err != nil {
-		log.Debugln("No cargo file found:", file)
+		log.Debug().Str("file", file).Msg("No cargo file found")
 		currentCargo = Cargo{}
 		return
 	}
 	var cargo Cargo
-	json.Unmarshal(data, &cargo)
+	if err := json.Unmarshal(data, &cargo); err != nil {
+		log.Error().Err(err).Str("file", file).Msg("Failed to unmarshal cargo file")
+		currentCargo = Cargo{}
+		return
+	}
 	currentCargo = cargo
 }
 
@@ -84,15 +88,15 @@ func initNameMap() {
 func readCsvFile(filename string) [][]string {
 	csvfile, err := os.Open(filename)
 	if err != nil {
-		log.Panicln(err)
-		return nil
+		log.Fatal().Err(err).Str("file", filename).Msg("Failed to open CSV file")
+		os.Exit(1)
 	}
 	defer csvfile.Close()
 	csvreader := csv.NewReader(csvfile)
 	records, err := csvreader.ReadAll()
 	if err != nil {
-		log.Panicln(err)
-		return nil
+		log.Fatal().Err(err).Str("file", filename).Msg("Failed to read CSV file")
+		os.Exit(1)
 	}
 	return records
 }
