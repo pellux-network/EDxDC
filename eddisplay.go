@@ -30,7 +30,7 @@ type TextLogFormatter struct{}
 //go:embed icon.ico
 var iconData []byte
 
-const AppVersion = "1.2.2-beta"
+const AppVersion = "1.2.3-beta"
 
 func cleanupOldUpdaters() {
 	tmpDir := filepath.Join(os.TempDir(), "EDxDC")

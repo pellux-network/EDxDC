@@ -1,11 +1,11 @@
 [Setup]
 AppName=EDxDC
 AppId=Pellux-Network.EDxDC
-AppVersion=1.2.2-beta
+AppVersion=1.2.3-beta
 DefaultDirName={code:GetInstallDir}
 DefaultGroupName=EDxDC
 OutputDir=.
-OutputBaseFilename=EDxDC-v1.2.2-beta-Setup
+OutputBaseFilename=EDxDC-v1.2.3-beta-Setup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
