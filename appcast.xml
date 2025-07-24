@@ -12,7 +12,7 @@
       <sparkle:releaseNotesLink>https://pellux-network.github.io/EDxDC/CHANGELOG.md</sparkle:releaseNotesLink>
       <description>Bug fixes and improvements</description>
       <pubDate>24 Jul 2025 02:00:00 +0000</pubDate>
-      <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.2.2-beta/EDxDC-v1.2.2-beta-Setup.exe"
+      <enclosure url="https://github.com/pellux-network/EDxDC/releases/download/v1.2.3-beta/EDxDC-v1.2.3-beta-Setup.exe"
                  length="0"
                  type="application/octet-stream"/>
     </item>
