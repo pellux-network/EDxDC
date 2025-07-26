@@ -37,6 +37,7 @@ func GetEDSMSystemValue(systemaddress int64) (*edsm.System, error) {
 	return &valinfo.S, nil
 }
 
+var screenWidth = 21 // Default screen width for MFD
 // Helper to render a station page
 func RenderStationPage(page *mfd.Page, header string, st edsm.Station) {
 	// Map allegiance to abbreviation
@@ -51,7 +52,7 @@ func RenderStationPage(page *mfd.Page, header string, st edsm.Station) {
 	if alg == "" {
 		alg = st.Allegiance // fallback to raw if not mapped
 	}
-	page.Add(lcdformat.SpaceBetween(16, header, alg))
+	page.Add(lcdformat.SpaceBetween(screenWidth, header, alg))
 	page.Add(st.Name)
 	page.Add(st.Type)
 }
@@ -69,7 +70,7 @@ func RenderFleetCarrierPage(page *mfd.Page, header, fcID, fcName string, systemA
 			}
 		}
 	}
-	page.Add(lcdformat.SpaceBetween(16, header, fcID))
+	page.Add(lcdformat.SpaceBetween(screenWidth, header, fcID))
 	page.Add(fcName)
 	page.Add(stType)
 }
@@ -170,7 +171,7 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 					ApplyBodyPage(page, "TGT BODY", state.Location.SystemAddress, state.Destination.BodyID, state.Destination.Name)
 					return
 				default:
-					page.Add(lcdformat.SpaceBetween(16, "TGT BODY", state.Destination.Name))
+					page.Add(lcdformat.SpaceBetween(screenWidth, "TGT BODY", state.Destination.Name))
 					if body.SubType != "" {
 						page.Add(body.SubType)
 					}
@@ -179,7 +180,7 @@ func RenderDestinationPage(page *mfd.Page, state Journalstate) {
 			}
 		}
 		// Fallback if EDSM fails or no BodyID
-		page.Add(lcdformat.SpaceBetween(16, "TGT BODY", state.Destination.Name))
+		page.Add(lcdformat.SpaceBetween(screenWidth, "TGT BODY", state.Destination.Name))
 		return
 	}
 
@@ -198,7 +199,7 @@ func RenderCargoPage(page *mfd.Page, _ Journalstate) {
 	lines = append(lines, fmt.Sprintf("CARGO: %04d/%04d", currentCargo.Count, ModulesInfoCargoCapacity()))
 	// If currentCargo is nil (never loaded), show "No cargo data"
 	if currentCargo.Inventory == nil {
-		lines = append(lines, lcdformat.FillAround(16, "*", " NO CRGO DATA "))
+		lines = append(lines, lcdformat.FillAround(screenWidth, "*", " NO CRGO DATA "))
 		for _, line := range lines {
 			page.Add(line)
 		}
@@ -207,7 +208,7 @@ func RenderCargoPage(page *mfd.Page, _ Journalstate) {
 
 	if len(currentCargo.Inventory) == 0 {
 		// If cargo inventory is empty, show "Cargo Hold Empty"
-		lines = append(lines, lcdformat.FillAround(16, "*", " NO CARGO "))
+		lines = append(lines, lcdformat.FillAround(screenWidth, "*", " NO CARGO "))
 		for _, line := range lines {
 			page.Add(line)
 		}
@@ -220,7 +221,7 @@ func RenderCargoPage(page *mfd.Page, _ Journalstate) {
 	})
 
 	for _, line := range currentCargo.Inventory {
-		lines = append(lines, lcdformat.SpaceBetween(16, line.displayname(), printer.Sprintf("%d", line.Count)))
+		lines = append(lines, lcdformat.SpaceBetween(screenWidth, line.displayname(), printer.Sprintf("%d", line.Count)))
 	}
 	// Add all pages in slice to the MFD
 	for _, line := range lines {
@@ -254,7 +255,7 @@ func ApplySystemPage(page *mfd.Page, header, systemname string, systemaddress in
 		// Add FUEL indicator if star is scoopable
 		if mainBody.IsScoopable {
 
-			newHeader = lcdformat.SpaceBetween(16, header, "FUEL")
+			newHeader = lcdformat.SpaceBetween(screenWidth, header, "FUEL")
 			lines = append(lines, newHeader)
 		} else {
 			lines = append(lines, header)
@@ -274,23 +275,23 @@ func ApplySystemPage(page *mfd.Page, header, systemname string, systemaddress in
 	if state != nil && header == "NEXT JUMP" {
 		jumps = fmt.Sprintf("J:%d", state.EDSMTarget.RemainingJumpsInRoute)
 	}
-	lines = append(lines, lcdformat.SpaceBetween(16, fmt.Sprintf("CLS:%s", starTypeData.Class), jumps))
+	lines = append(lines, lcdformat.SpaceBetween(screenWidth, fmt.Sprintf("CLS:%s", starTypeData.Class), jumps))
 	// Add the main star information
 	lines = append(lines, starTypeData.Desc)
 	// Add system body count and estimated values
 
-	lines = append(lines, lcdformat.SpaceBetween(16, "Bodies:", printer.Sprintf("%d", sys.BodyCount)))
-	lines = append(lines, lcdformat.SpaceBetween(16, "Scan:", printer.Sprintf("%dcr", values.EstimatedValue)))
-	lines = append(lines, lcdformat.SpaceBetween(16, "Map:", printer.Sprintf("%dcr", values.EstimatedValueMapped)))
+	lines = append(lines, lcdformat.SpaceBetween(screenWidth, "Bodies:", printer.Sprintf("%d", sys.BodyCount)))
+	lines = append(lines, lcdformat.SpaceBetween(screenWidth, "Scan:", printer.Sprintf("%dcr", values.EstimatedValue)))
+	lines = append(lines, lcdformat.SpaceBetween(screenWidth, "Map:", printer.Sprintf("%dcr", values.EstimatedValueMapped)))
 
 	// Print valuable bodies if available
 	if len(values.ValuableBodies) > 0 {
-		lines = append(lines, lcdformat.FillAround(16, "*", " VAL BODIES "))
+		lines = append(lines, lcdformat.FillAround(screenWidth, "*", " VAL BODIES "))
 		for _, valbody := range values.ValuableBodies {
 			bodyName := valbody.ShortName(*sys)
 			crValue := printer.Sprintf("%dcr", valbody.ValueMax)
 			// append the body name and value to the lines
-			lines = append(lines, lcdformat.SpaceBetween(16, bodyName, crValue))
+			lines = append(lines, lcdformat.SpaceBetween(screenWidth, bodyName, crValue))
 		}
 	}
 
@@ -314,7 +315,7 @@ func ApplySystemPage(page *mfd.Page, header, systemname string, systemaddress in
 
 	// Add prospecting information if landable bodies are present
 	// if len(landables) > 0 {
-	// 	lines = append(lines, lcdformat.FillAround(16, "*", " PROSPECT "))
+	// 	lines = append(lines, lcdformat.FillAround(screenWidth, "*", " PROSPECT "))
 	// 	materialList := []string{}
 
 	// 	for mat := range matLocations {
@@ -341,8 +342,8 @@ func ApplySystemPage(page *mfd.Page, header, systemname string, systemaddress in
 	// 		lines = append(lines, fmt.Sprintf("%s %d", material, len(bodiesWithMat)))
 	// 		b := bodiesWithMat[0]
 	// 		// Add the body name (number usually) and material percentage
-	// 		// matLine := lcdformat.SpaceBetween(16, b.ShortName(*sys), fmt.Sprintf("%.2f%%", float64(b.Materials[material])))
-	// 		matLine := lcdformat.SpaceBetween(16, b.ShortName(*sys), fmt.Sprintf("%.2f%%%%", b.Materials[material]))
+	// 		// matLine := lcdformat.SpaceBetween(screenWidth, b.ShortName(*sys), fmt.Sprintf("%.2f%%", float64(b.Materials[material])))
+	// 		matLine := lcdformat.SpaceBetween(screenWidth, b.ShortName(*sys), fmt.Sprintf("%.2f%%%%", b.Materials[material]))
 	// 		lines = append(lines, matLine)
 	// 	}
 	// } else {
@@ -361,7 +362,7 @@ func ApplyBodyPage(page *mfd.Page, header string, systemAddress int64, bodyID in
 	sys, err := GetEDSMBodies(systemAddress)
 	if err != nil {
 		log.Println("Error fetching EDSM data: ", err)
-		lines = append(lines, lcdformat.FillAround(16, "*", " EDSM ERROR "))
+		lines = append(lines, lcdformat.FillAround(screenWidth, "*", " EDSM ERROR "))
 		for _, line := range lines {
 			page.Add(line)
 		}
@@ -370,20 +371,20 @@ func ApplyBodyPage(page *mfd.Page, header string, systemAddress int64, bodyID in
 
 	body := sys.BodyByID(bodyID)
 	if body.BodyID == 0 {
-		lines = append(lines, lcdformat.FillAround(16, "*", " NO BODY DATA "))
+		lines = append(lines, lcdformat.FillAround(screenWidth, "*", " NO BODY DATA "))
 		for _, line := range lines {
 			page.Add(line)
 		}
 		return
 	}
-	lines = append(lines, lcdformat.SpaceBetween(16, header, fmt.Sprintf("%.2fG", body.Gravity)))
+	lines = append(lines, lcdformat.SpaceBetween(screenWidth, header, fmt.Sprintf("%.2fG", body.Gravity)))
 	lines = append(lines, bodyName)
 	lines = append(lines, cases.Title(language.English).String(body.SubType))
 
 	// add the planet materials
-	lines = append(lines, lcdformat.FillAround(16, "*", " MATERIAL "))
+	lines = append(lines, lcdformat.FillAround(screenWidth, "*", " MATERIAL "))
 	for _, m := range body.MaterialsSorted() {
-		lines = append(lines, lcdformat.SpaceBetween(16, fmt.Sprintf("%5.2f%%%%", m.Percentage), m.Name))
+		lines = append(lines, lcdformat.SpaceBetween(screenWidth, fmt.Sprintf("%5.2f%%%%", m.Percentage), m.Name))
 	}
 	for _, line := range lines {
 		page.Add(line)

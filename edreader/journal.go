@@ -30,7 +30,7 @@ const (
 	LocationDocked
 )
 
-// Journalstate encapsulates the player state baed on the journal
+// Journalstate contains the player state based on the journal
 type Journalstate struct {
 	Location
 	EDSMTarget
@@ -197,6 +197,7 @@ func SetFirstEnabledPageKey(cfg map[string]bool) {
 }
 
 // handleJournalFile reads only new lines from the journal file since the last read.
+// This is the one that actually loads the journal file
 func handleJournalFile(filename string) {
 	if filename == "" {
 		return

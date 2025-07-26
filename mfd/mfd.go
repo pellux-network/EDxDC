@@ -48,4 +48,7 @@ func (p Page) Copy() Page {
 // Write writes the MFD file
 func Write(mfd Display) {
 	UpdateDisplay(mfd)
+	lines := mfd.Pages[currentPage].Lines
+	RESTPageUpdate(lines)
+	SerialPageUpdate(lines)
 }
