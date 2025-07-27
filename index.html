@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>EDxDC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+          --bg: #181c20;
+          --panel: #23272e;
+          --accent: #4da6ff;
+          --accent2: #ffb84d;
+          --hover: #98ccff;
+          --text: #e0e0e0;
+          --muted: #888;
+          --radius: 18px;
+          --shadow: 0 4px 24px #000a;
+        }
+        html, body {
+          background: var(--bg);
+          color: var(--text);
+          font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+          margin: 0;
+          padding: 0;
+          min-height: 100vh;
+        }
+        body {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+        .main-header {
+          background: linear-gradient(90deg, #1e2227 60%, #23272e 100%);
+          box-shadow: var(--shadow);
+          padding: 2.5rem 0 1.5rem 0;
+          text-align: center;
+          border-radius: 0 0 var(--radius) var(--radius);
+        }
+        .logo-img {
+          width: 120px;
+          border-radius: 16px;
+          box-shadow: 0 2px 16px #0008;
+          margin-bottom: 1.2rem;
+          transition: transform 0.2s;
+        }
+        .logo-img:hover {
+          transform: scale(1.05) rotate(-2deg);
+        }
+        .main-title {
+          font-size: 2.7rem;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          margin: 0 0 0.5rem 0;
+          color: var(--accent);
+          text-shadow: 0 2px 12px #0007;
+        }
+        .subtitle {
+          font-size: 1.18em;
+          color: #b0cfff;
+          margin-bottom: 0.5em;
+        }
+        .note {
+          background: var(--panel);
+          color: var(--accent2);
+          border-left: 5px solid var(--accent2);
+          padding: 0.85em 1.2em;
+          margin: 2em auto 2.5em auto;
+          font-size: 1.08em;
+          max-width: 480px;
+          border-radius: var(--radius);
+          box-shadow: 0 2px 10px #0004;
+        }
+       .note a {
+          color: var(--accent);
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.13s, border 0.13s;
+          border-bottom: 2px solid transparent;
+        }
+        .note a:hover {
+          color: var(--hover);
+          border-bottom: 2px solid var(--hover);
+        }
+        .container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: .5rem 1.5rem 3rem 1.5rem;
+          flex: 1;
+        }
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.5em;
+          margin: 2.5em 0 2em 0;
+        }
+        .feature-card {
+          background: var(--panel);
+          border-radius: var(--radius);
+          box-shadow: 0 2px 12px #0005;
+          padding: 1.3em 1.2em 1.1em 1.2em;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          min-height: 120px;
+          transition: transform 0.13s, box-shadow 0.13s;
+          border-left: 4px solid var(--accent);
+        }
+        .feature-card:hover {
+          transform: translateY(-4px) scale(1.025);
+          box-shadow: 0 6px 24px #0007;
+          border-left: 4px solid var(--hover);
+        }
+        .feature-title {
+          font-size: 1.13em;
+          font-weight: 600;
+          margin-bottom: 0.4em;
+          color: var(--accent);
+        }
+        .quickstart-panel {
+          background: linear-gradient(90deg, #23272e 80%, #1e2227 100%);
+          border-radius: var(--radius);
+          box-shadow: 0 2px 12px #0005;
+          padding: 1.5em 2em 1.2em 2em;
+          margin: 2.5em 0 2.5em 0;
+          border-left: 5px solid var(--accent);
+          transition: box-shadow 0.13s;
+        }
+        .quickstart-panel:hover {
+          box-shadow: 0 6px 24px #0007;
+        }
+        .quickstart-panel h2 {
+          margin-top: 0;
+          color: var(--accent);
+          font-size: 1.3em;
+          letter-spacing: 0.01em;
+        }
+        .quickstart-panel ol {
+          margin: 0 0 0 1.5em;
+          padding: 0;
+          font-size: 1.07em;
+        }
+        .quickstart-panel a {
+          color: var(--accent);
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.13s, border 0.13s;
+          border-bottom: 2px solid transparent;
+        }
+        .quickstart-panel a:hover {
+          color: var(--hover);
+          border-bottom: 2px solid var(--hover);
+        }
+        .docs-section {
+          margin: 2.5em 0 1.5em 0;
+        }
+        .docs-list {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.2em 2.5em;
+          list-style: none;
+          padding: 0;
+          margin: 1.2em 0 2em 0;
+        }
+        .docs-list li {
+          font-size: 1.08em;
+        }
+        .docs-list a {
+          color: var(--accent);
+          text-decoration: none;
+          font-weight: 500;
+          border-bottom: 2px solid transparent;
+          transition: border 0.13s, color 0.13s;
+          padding-bottom: 2px;
+        }
+        .docs-list a:hover {
+          color: var(--hover);
+          border-bottom: 2px solid var(--hover);
+        }
+        .footer {
+          text-align: center;
+          color: var(--muted);
+          font-size: 1em;
+          margin: 2.5em 0 1.2em 0;
+          letter-spacing: 0.01em;
+        }
+        .footer a {
+          color: var(--accent);
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.13s;
+        }
+        .footer a:hover {
+          color: var(--hover);
+          text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+          .container { padding: 1.2rem 0.5rem 2rem 0.5rem; }
+          .main-header { padding: 1.5rem 0 1rem 0; }
+          .quickstart-panel { padding: 1em 0.7em 1em 0.7em; }
+          .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+  </head>
+  <body>
+    <header class="main-header">
+      <img src="./assets/giticon.png" alt="EDxDC Logo" class="logo-img" />
+      <div class="main-title">EDxDC</div>
+      <div class="subtitle">
+        Real-time Elite Dangerous journal data on your X52 Pro MFD.<br />
+        Instantly see system, planet, and cargo info as you play.
+      </div>
+      <div class="note">
+        <b>Note:</b> Only works with the X52 Pro (not the regular X52 HOTAS).
+      </div>
+      <div class="note">
+        <b>Note:</b> EDxDC is currently in beta. Please report bugs on
+        <a href="https://github.com/pellux-network/EDxDC/issues" target="_blank"
+          >GitHub Issues</a
+        >.
+      </div>
+    </header>
+    <div class="image-section">
+      <figure>
+      <img src="./assets/diagrams/nextjumpexample.png" alt="Next Jump Example" class="feature-image" />
+      <figcaption class="image-caption">
+        <b>Example:</b> The "Next Jump" page on the X52 Pro MFD, showing the next jump of the plotted route in real time.
+      </figcaption>
+      </figure>
+    </div>
+    <style>
+      .image-section {
+      display: flex;
+      justify-content: center;
+      margin: 2.5em 0 1.5em 0;
+      }
+      .feature-image {
+      max-width: 98%;
+      width: 480px;
+      border-radius: 2px;
+      box-shadow: 0 2px 16px #0008;
+      border: 8px solid var(--panel);
+      background: var(--panel);
+      transition: box-shadow 0.15s;
+      }
+      .feature-image:hover {
+      box-shadow: 0 6px 32px #000b;
+      }
+      .image-caption {
+      color: var(--muted);
+      font-size: 1.03em;
+      margin-top: 0.7em;
+      text-align: center;
+      max-width: 480px;
+      }
+      @media (max-width: 600px) {
+      .feature-image { width: 99vw; max-width: 99vw; }
+      .image-caption { max-width: 99vw; }
+      }
+    </style>
+    <main class="container">
+      <section class="features-grid">
+        <div class="feature-card">
+          <div class="feature-title">Station &amp; Planet Details</div>
+          <div>See station, fleet carrier, and planet info at a glance.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Real-Time Cargo Tracking</div>
+          <div>Monitor your cargo hold and materials instantly.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Surface Gravity &amp; Scan Value</div>
+          <div>Get surface gravity and scan value indicators for planets.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Context-Aware Pages</div>
+          <div>Pages switch automatically based on your current activity.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Manual EDSM Data Refresh</div>
+          <div>
+            Update exploration data on demand to ensure you have the latest
+            system information.
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Scoopability &amp; Route Info</div>
+          <div>See scoopable stars and jump route information.</div>
+        </div>
+      </section>
+      <section class="quickstart-panel">
+        <h2 style="color: var(--text)">Quick Start</h2>
+        <ol>
+          <li>
+            Install the official
+            <a
+              href="https://support.logi.com/hc/en-us/articles/360024838173--Downloads-X52-Professional-Space-Flight-H-O-T-A-S"
+              target="_blank"
+            >
+              Logitech X52 Pro drivers
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://github.com/pellux-network/EDxDC/releases/latest"
+              target="_blank"
+            >
+              Download
+            </a>
+            the latest EDxDC installer from GitHub and launch it
+          </li>
+            <li>
+            After installation, the app is ready to run.<br>
+            If needed, the config file is located at: <code>%APPDATA%\EDxDC\main.conf</code>
+            </li>
+        </ol>
+        <div class="note" style="margin-top: 1em">
+          <b>Note</b>: For detailed setup, see the
+          <a href="./1.-Getting-Started">Getting Started</a> guide.
+        </div>
+      </section>
+      <section class="docs-section">
+        <h2 style="color: var(--text); margin-bottom: 0.7em">Documentation</h2>
+        <ul class="docs-list">
+          <li><a href="./1.-Getting-Started">Getting Started</a></li>
+          <li><a href="./2.-Features-and-Output">Features &amp; Output</a></li>
+          <li><a href="./3.-Configuration">Configuration</a></li>
+          <li><a href="./4.-Troubleshooting">Troubleshooting</a></li>
+          <li><a href="./5.-Drivers">Drivers</a></li>
+          <li><a href="./6.-Credits">Credits</a></li>
+        </ul>
+      </section>
+    </main>
+    <footer class="footer">
+      <sub>
+        EDxDC is open source and maintained for compatibility with the latest
+        Elite Dangerous journal formats.<br />
+        <a href="https://github.com/pellux-network/EDxDC" target="_blank"
+          >View on GitHub</a
+        >
+      </sub>
+    </footer>
+  </body>
+</html>
+```
