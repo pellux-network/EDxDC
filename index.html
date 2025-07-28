@@ -42,7 +42,7 @@
             width: 32px;
             height: 32px;
             opacity: 0.33;
-            transition: opacity 0.20s, transform 0.20s;
+            transition: opacity 0.2s, transform 0.2s;
             border-radius: 50%;
             filter: invert(1) brightness(2);
           "
@@ -92,6 +92,7 @@
       </figure>
     </div>
     <main class="container">
+      <h2 style="color: var(--text)">Features</h2>
       <section class="features-grid">
         <div class="feature-card">
           <div class="feature-title">Station &amp; Planet Details</div>
@@ -238,6 +239,12 @@
         flex-direction: column;
         min-height: 100vh;
       }
+      a {
+        text-decoration: none !important;
+      }
+      a:hover {
+        text-decoration: none !important;
+      }
       .main-header {
         background: linear-gradient(90deg, #1e2227 60%, #23272e 100%);
         box-shadow: var(--shadow);
@@ -260,7 +267,7 @@
         font-weight: 700;
         letter-spacing: 0.04em;
         margin: 0 0 0.5rem 0;
-        color: var(--accent);
+        color: var(--text);
         text-shadow: 0 2px 12px #0007;
       }
       .subtitle {
@@ -357,7 +364,6 @@
       }
       .quickstart-panel a:hover {
         color: var(--hover);
-        border-bottom: 2px solid var(--hover);
       }
       .docs-section {
         margin: 2.5em 0 1.5em 0;
