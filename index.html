@@ -6,40 +6,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Open Graph metadata -->
     <meta property="og:title" content="EDxDC" />
-    <meta property="og:description" content="Real-time Elite Dangerous journal data on your X52 Pro MFD. Instantly see system, planet, and cargo info as you play." />
-    <meta property="og:image" content="./assets/ogheader.png" />
-    <meta property="og:logo" content="./assets/giticon.png" />
+    <meta
+      property="og:description"
+      content="Real-time Elite Dangerous journal data on your X52 Pro MFD. Instantly see system, planet, and cargo info as you play."
+    />
+    <meta property="og:image" content="assets/ogheader.png" />
+    <meta property="og:logo" content="assets/giticon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://edxdc.pellux.net" />
     <meta property="og:site_theme" content="#09cc58" />
-    <meta name="twitter:image" content="./assets/giticon.png" />
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://edxdc.pellux.net" />
+    <meta name="twitter:title" content="website" />
+    <meta
+      name="twitter:description"
+      content="Real-time Elite Dangerous journal data on your X52 Pro MFD. Instantly see system, planet, and cargo info as you play."
+    />
+    <meta
+      name="twitter:image"
+      content="assets/ogheader.png"
+    />
   </head>
   <body>
     <header class="main-header">
-      <img src="./assets/giticon.png" alt="EDxDC Logo" class="logo-img" />
+      <img src="assets/giticon.png" alt="EDxDC Logo" class="logo-img" />
       <div class="main-title">EDxDC</div>
       <div class="subtitle">
         Real-time Elite Dangerous journal data on your X52 Pro MFD.<br />
         Instantly see system, planet, and cargo info as you play.
       </div>
-      <div style="display: flex; justify-content: center; gap: 1.2em; flex-wrap: wrap; margin-bottom: 1.5em;">
-        <div class="note" style="margin: 0;">
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 1.2em;
+          flex-wrap: wrap;
+          margin-bottom: 1.5em;
+        "
+      >
+        <div class="note" style="margin: 0">
           <b>Note:</b> Only works with the X52 Pro (not the regular X52 HOTAS).
         </div>
-        <div class="note" style="margin: 0;">
+        <div class="note" style="margin: 0">
           <b>Note:</b> EDxDC is currently in beta. Please report bugs on
-          <a href="https://github.com/pellux-network/EDxDC/issues" target="_blank"
-        >GitHub Issues</a
+          <a
+            href="https://github.com/pellux-network/EDxDC/issues"
+            target="_blank"
+            >GitHub Issues</a
           >.
         </div>
       </div>
     </header>
     <div class="image-section">
       <figure>
-      <img src="./assets/diagrams/nextjumpexample.png" alt="Next Jump Example" class="feature-image" />
-      <figcaption class="image-caption">
-        <b>Example:</b> The "Next Jump" page on the X52 Pro MFD, showing the next jump of the plotted route in real time.
-      </figcaption>
+        <img
+          src="assets/diagrams/nextjumpexample.png"
+          alt="Next Jump Example"
+          class="feature-image"
+        />
+        <figcaption class="image-caption">
+          <b>Example:</b> The "Next Jump" page on the X52 Pro MFD, showing the
+          next jump of the plotted route in real time.
+        </figcaption>
       </figure>
     </div>
     <main class="container">
@@ -93,10 +122,11 @@
             </a>
             the latest EDxDC installer from GitHub and launch it
           </li>
-            <li>
-            After installation, the app is ready to run.<br>
-            If needed, the config file is located at: <code>%APPDATA%\EDxDC\main.conf</code>
-            </li>
+          <li>
+            After installation, the app is ready to run.<br />
+            If needed, the config file is located at:
+            <code>%APPDATA%\EDxDC\main.conf</code>
+          </li>
         </ol>
         <div class="note" style="margin-top: 1em">
           <b>Note</b>: For detailed setup, see the
@@ -110,7 +140,17 @@
           <li><a href="./2.-Features-and-Output">Features &amp; Output</a></li>
           <li><a href="./3.-Configuration">Configuration</a></li>
           <li><a href="./4.-Troubleshooting">Troubleshooting</a></li>
-            <li><a href="#" style="pointer-events: none; color: var(--muted); cursor: not-allowed;">Drivers</a></li>
+          <li>
+            <a
+              href="#"
+              style="
+                pointer-events: none;
+                color: var(--muted);
+                cursor: not-allowed;
+              "
+              >Drivers</a
+            >
+          </li>
           <li><a href="./6.-Credits">Credits</a></li>
         </ul>
       </section>
@@ -125,9 +165,7 @@
       </sub>
     </footer>
     <!-- Jump to top button -->
-    <button id="jumpTopBtn" title="Back to top">
-      &#8679;
-    </button>
+    <button id="jumpTopBtn" title="Back to top">&#8679;</button>
     <style>
       :root {
         --bg: #181c20;
@@ -140,10 +178,11 @@
         --radius: 18px;
         --shadow: 0 4px 24px #000a;
       }
-      html, body {
+      html,
+      body {
         background: var(--bg);
         color: var(--text);
-        font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+        font-family: "Segoe UI", "Roboto", "Arial", sans-serif;
         margin: 0;
         padding: 0;
         min-height: 100vh;
@@ -208,7 +247,7 @@
       .container {
         max-width: 900px;
         margin: 0 auto;
-        padding: .5rem 1.5rem 3rem 1.5rem;
+        padding: 0.5rem 1.5rem 3rem 1.5rem;
         flex: 1;
       }
       .features-grid {
@@ -364,12 +403,25 @@
         box-shadow: 0 6px 24px #000b;
       }
       @media (max-width: 600px) {
-        .container { padding: 1.2rem 0.5rem 2rem 0.5rem; }
-        .main-header { padding: 1.5rem 0 1rem 0; }
-        .quickstart-panel { padding: 1em 0.7em 1em 0.7em; }
-        .features-grid { grid-template-columns: 1fr; }
-        .feature-image { width: 99vw; max-width: 99vw; }
-        .image-caption { max-width: 99vw; }
+        .container {
+          padding: 1.2rem 0.5rem 2rem 0.5rem;
+        }
+        .main-header {
+          padding: 1.5rem 0 1rem 0;
+        }
+        .quickstart-panel {
+          padding: 1em 0.7em 1em 0.7em;
+        }
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+        .feature-image {
+          width: 99vw;
+          max-width: 99vw;
+        }
+        .image-caption {
+          max-width: 99vw;
+        }
         #jumpTopBtn {
           right: 1em;
           bottom: 1em;
@@ -381,11 +433,11 @@
     </style>
     <script>
       // Show button when scrolled down
-      const btn = document.getElementById('jumpTopBtn');
-      window.addEventListener('scroll', () => {
-        btn.style.display = window.scrollY > 200 ? 'block' : 'none';
+      const btn = document.getElementById("jumpTopBtn");
+      window.addEventListener("scroll", () => {
+        btn.style.display = window.scrollY > 200 ? "block" : "none";
       });
-      btn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+      btn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
     </script>
   </body>
 </html>
