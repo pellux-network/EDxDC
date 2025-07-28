@@ -134,15 +134,15 @@
         </div>
       </section>
       <section class="docs-section">
-        <h2 style="color: var(--text); margin-bottom: 0.7em">Documentation</h2>
+        <h2 class="docs-header" style="margin-bottom: 0.7em"><a href="https://github.com/pellux-network/EDxDC/wiki">Wiki</a></h2>
         <ul class="docs-list">
-          <li><a href="./1.-Getting-Started">Getting Started</a></li>
-          <li><a href="./2.-Features-and-Output">Features &amp; Output</a></li>
-          <li><a href="./3.-Configuration">Configuration</a></li>
-          <li><a href="./4.-Troubleshooting">Troubleshooting</a></li>
+          <li><a href="https://github.com/pellux-network/EDxDC/wiki/1.-Getting-Started">Getting Started</a></li>
+          <li><a href="https://github.com/pellux-network/EDxDC/wiki/2.-Features-and-Output">Features &amp; Output</a></li>
+          <li><a href="https://github.com/pellux-network/EDxDC/wiki/3.-Configuration">Configuration</a></li>
+          <li><a href="https://github.com/pellux-network/EDxDC/wiki/4.-Troubleshooting">Troubleshooting</a></li>
           <li>
             <a
-              href="#"
+              href="https://github.com/pellux-network/EDxDC/wiki/5.-Drivers"
               style="
                 pointer-events: none;
                 color: var(--muted);
@@ -151,7 +151,7 @@
               >Drivers</a
             >
           </li>
-          <li><a href="./6.-Credits">Credits</a></li>
+          <li><a href="https://github.com/pellux-network/EDxDC/wiki/6.-Credits">Credits</a></li>
         </ul>
       </section>
     </main>
@@ -326,6 +326,18 @@
       }
       .docs-list li {
         font-size: 1.08em;
+      }
+      .docs-header a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+        border-bottom: 2px solid transparent;
+        transition: border 0.13s, color 0.13s;
+        padding-bottom: 2px;
+      }
+      .docs-header a:hover {
+        color: var(--hover);
+        border-bottom: 2px solid var(--hover);
       }
       .docs-list a {
         color: var(--accent);
