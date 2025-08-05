@@ -25,7 +25,8 @@
 
 Seamlessly reads Elite Dangerous journal data and presents real-time system, planet, cargo, and other information on your Saitek/Logitech X52 Pro Multi-Function Display.
 
-> **INFO:** _This software only works with the Saitek/Logitech X52 Pro. The standard X52 HOTAS does not support third-party software for the MFD._
+> [!IMPORTANT] 
+> _This software only works with the Saitek/Logitech X52 Pro. The standard X52 HOTAS does not support third-party software for the MFD._
 
 ※_Development is ongoing. See the [changelog](https://github.com/pellux-network/EDxDC/blob/master/CHANGELOG.md) for details on recent fixes and features._
 
@@ -43,7 +44,8 @@ If you haven't modified Elite Dangerous' journal path and don't want to disable 
 
 If your journal file location is different than the default or you wish to disable any pages, check the [Configuration](link) page on the [Wiki](https://github.com/pellux-network/EDxDC/wiki) for more details.
 
-> **INFO:** _It is recommended to run a tool that uploads data to the Elite Dangerous Data Network, such as [ED Market Connector](https://github.com/Marginal/EDMarketConnector). Doing this will ensure that any new discoveries can be shown on the display._
+> [!TIP] 
+> _It is recommended to run a tool that uploads data to the Elite Dangerous Data Network, such as [ED Market Connector](https://github.com/Marginal/EDMarketConnector). Doing this will ensure that any new discoveries can be shown on the display._
 
 ## [Wiki](https://github.com/pellux-network/EDxDC/wiki)
 
