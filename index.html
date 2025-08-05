@@ -62,7 +62,7 @@
           target="_blank" 
           class="download-btn"
         >
-          <span class="download-icon">⬇</span>
+          <img src="/assets/download.svg" alt="Download" class="download-icon" />
           Download Latest Release
         </a>
       </div>
@@ -314,9 +314,10 @@
         transform: translateY(-1px) scale(1.01);
       }
       .download-icon {
-        font-size: 1.4em;
-        font-weight: bold;
+        width: 32px;
+        height: 32px;
         opacity: 0.9;
+        flex-shrink: 0;
       }
       .note {
         background: var(--panel);
