@@ -56,6 +56,16 @@
         Real-time Elite Dangerous journal data on your X52 Pro MFD.<br />
         Instantly see system, planet, and cargo info as you play.
       </div>
+      <div class="download-section">
+        <a 
+          href="https://github.com/pellux-network/EDxDC/releases/latest" 
+          target="_blank" 
+          class="download-btn"
+        >
+          <span class="download-icon">⬇</span>
+          Download Latest Release
+        </a>
+      </div>
       <div
         style="
           display: flex;
@@ -274,6 +284,39 @@
         font-size: 1.18em;
         color: #b0cfff;
         margin-bottom: 2em;
+      }
+      .download-section {
+        margin: 2.5em 0 2em 0;
+      }
+      .download-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.8em;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--hover) 100%);
+        color: white;
+        padding: 1.2em 2.5em;
+        border-radius: var(--radius);
+        font-size: 1.25em;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(77, 166, 255, 0.3);
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        letter-spacing: 0.02em;
+      }
+      .download-btn:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 32px rgba(77, 166, 255, 0.4);
+        background: linear-gradient(135deg, var(--hover) 0%, #b3d9ff 100%);
+      }
+      .download-btn:active {
+        transform: translateY(-1px) scale(1.01);
+      }
+      .download-icon {
+        font-size: 1.4em;
+        font-weight: bold;
+        opacity: 0.9;
       }
       .note {
         background: var(--panel);
