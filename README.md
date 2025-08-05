@@ -28,7 +28,7 @@ Seamlessly reads Elite Dangerous journal data and presents real-time system, pla
 > [!IMPORTANT] 
 > _This software only works with the Saitek/Logitech X52 Pro. The standard X52 HOTAS does not support third-party software for the MFD._
 
-※_Development is ongoing. See the [changelog](https://github.com/pellux-network/EDxDC/blob/master/CHANGELOG.md) for details on recent fixes and features._
+※_Development is ongoing. See the [changelog](https://github.com/pellux-network/EDxDC/blob/main/CHANGELOG.md) for details on recent fixes and features._
 
 ## Getting Started
 
