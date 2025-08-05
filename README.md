@@ -42,7 +42,7 @@ To install EDxDC, you have two options:
 
 If you haven't modified Elite Dangerous' journal path and don't want to disable any pages, simply run the app and your MFD should immediately begin loading.
 
-If your journal file location is different than the default or you wish to disable any pages, check the [Configuration](link) page on the [Wiki](https://github.com/pellux-network/EDxDC/wiki) for more details.
+If your journal file location is different than the default or you wish to disable any pages, check the [Configuration](https://github.com/pellux-network/EDxDC/wiki/3.-Configuration) page on the [Wiki](https://github.com/pellux-network/EDxDC/wiki) for more details.
 
 > [!TIP] 
 > _It is recommended to run a tool that uploads data to the Elite Dangerous Data Network, such as [ED Market Connector](https://github.com/Marginal/EDMarketConnector). Doing this will ensure that any new discoveries can be shown on the display._
