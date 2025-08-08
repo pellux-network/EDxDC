@@ -12,7 +12,7 @@ require (
 	github.com/pbxx/goLCDFormat v1.0.2
 	github.com/rs/zerolog v1.34.0
 	golang.org/x/sys v0.34.0
-	golang.org/x/text v0.27.0
+	golang.org/x/text v0.28.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gopkg.in/yaml.v2 v2.4.0
 )
