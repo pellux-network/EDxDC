@@ -2,6 +2,13 @@
 
 ## EDxDC Changelog
 
+## [1.2.4-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.3-beta...v1.2.4-beta) (2025-08-05)
+
+
+### Bug Fixes
+
+* fix broken link ([a5d75a2](https://github.com/pellux-network/EDxDC/commit/a5d75a21c9a4af4bf26779fea597b493a4859aa7))
+
 ## [1.2.3-beta](https://github.com/pellux-network/EDxDC/compare/v1.2.2-beta...v1.2.3-beta) (2025-07-24)
 
 
