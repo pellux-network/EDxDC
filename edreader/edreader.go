@@ -68,6 +68,7 @@ func Start(cfg conf.Conf) {
 	// Set the first enabled page key for splash logic
 	SetFirstEnabledPageKey(cfg.Pages)
 
+	SetLightConfig(cfg)
 	updateMFD(journalfolder, cfg)
 
 	var err error
@@ -131,6 +132,13 @@ func updateMFD(journalfolder string, cfg conf.Conf) {
 	Mfd = mfd.Display{Pages: enabledPages}
 	MfdLock.Unlock()
 
+	if cfg.Lights.Enabled {
+		stateMu.RLock()
+		state := lastJournalState
+		stateMu.RUnlock()
+		UpdateLights(state)
+	}
+
 	swapMfd()
 }
 
@@ -142,6 +150,7 @@ func Stop() {
 	if watcher != nil {
 		watcher.Close()
 	}
+	StopLights()
 }
 
 func findJournalFile(folder string) string {

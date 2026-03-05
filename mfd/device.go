@@ -6,6 +6,29 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+const (
+	LedFire       uint32 = 0
+	LedFireARed   uint32 = 1
+	LedFireAGreen uint32 = 2
+	LedFireBRed   uint32 = 3
+	LedFireBGreen uint32 = 4
+	LedFireDRed   uint32 = 5
+	LedFireDGreen uint32 = 6
+	LedFireERed   uint32 = 7
+	LedFireEGreen uint32 = 8
+	LedT1T2Red    uint32 = 9
+	LedT1T2Green  uint32 = 10
+	LedT3T4Red    uint32 = 11
+	LedT3T4Green  uint32 = 12
+	LedT5T6Red    uint32 = 13
+	LedT5T6Green  uint32 = 14
+	LedPoV2Red    uint32 = 15
+	LedPoV2Green  uint32 = 16
+	LedClutchRed  uint32 = 17
+	LedClutchGreen uint32 = 18
+	LedThrottle   uint32 = 19
+)
+
 // The current device handle
 var device uintptr = 0
 
@@ -59,13 +82,26 @@ func DeInitDevice() {
 
 // UpdateDisplay updates the displayed text with a new set of pages.
 func UpdateDisplay(display Display) error {
-
 	if len(display.Pages) != int(devicePages) {
 		return fmt.Errorf("provided display has %d pages. Must have %d", len(display.Pages), devicePages)
 	}
 	currentDisplay = display
 	refreshDisplay()
 	return nil
+}
+
+// UpdateLeds sets the state of an LED on the device
+func UpdateLeds(ledIdx uint32, active bool) {
+	if loaded && device > 0 {
+		val := uint32(0)
+		if active {
+			val = 1
+		}
+		// Update LEDs for all pages to ensure they stay consistent when switching pages
+		for p := uint32(0); p < devicePages; p++ {
+			setLed(p, ledIdx, val)
+		}
+	}
 }
 
 func initPages() {

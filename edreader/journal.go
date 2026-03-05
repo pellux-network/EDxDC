@@ -41,7 +41,27 @@ type Journalstate struct {
 	LastFSDTargetAddress   int64
 	ShowSplashScreen       bool      // NEW: splash flag
 	SplashScreenStartTime  time.Time // NEW: splash start time
+	ShipFlags              uint64    // NEW: ship status flags
+	ShipFlags2             uint64    // NEW: ship status flags 2
+	LegalState             string    // NEW: legal state
 }
+
+const (
+	FlagLandingGearDeployed   uint64 = 1 << 2
+	FlagSupercruise           uint64 = 1 << 4
+	FlagHardpointsDeployed    uint64 = 1 << 6
+	FlagLightsOn              uint64 = 1 << 8
+	FlagCargoScoopDeployed    uint64 = 1 << 9
+	FlagSilentRunning         uint64 = 1 << 10
+	FlagMassLocked            uint64 = 1 << 16
+	FlagFsdCharging           uint64 = 1 << 17
+	FlagFsdCooldown           uint64 = 1 << 18
+	FlagOverheating           uint64 = 1 << 20
+	FlagNightVision           uint64 = 1 << 28
+	FlagFsdJump               uint64 = 1 << 30
+	FlagIsSpeeding            uint64 = 1 << (32 + 1) // Virtual flag for legal state speeding
+	FlagDocking               uint64 = 1 << (32 + 2) // Virtual flag for docking state
+)
 
 // Location indicates the players current location in the game
 type Location struct {
@@ -240,7 +260,9 @@ func handleJournalFile(filename string) {
 		linesRead++
 	}
 	if linesRead > 0 {
+		stateMu.Lock()
 		lastJournalState = state // Only update if new lines were read
+		stateMu.Unlock()
 		log.Debug().Int("linesRead", linesRead).Str("filename", logging.CleanPath(filename)).Msg("Processed new journal lines")
 	}
 
@@ -319,6 +341,21 @@ func handleStatusFile(filename string) {
 	// After updating Destination, check for arrival
 	checkArrival()
 
+	stateMu.Lock()
+	flags, _ := jsonparser.GetInt(data, "Flags")
+	flags2, _ := jsonparser.GetInt(data, "Flags2")
+	lastJournalState.ShipFlags = uint64(flags)
+	lastJournalState.ShipFlags2 = uint64(flags2)
+
+	legalState, _ := jsonparser.GetString(data, "LegalState")
+	lastJournalState.LegalState = legalState
+	if legalState == "Speeding" {
+		lastJournalState.ShipFlags |= FlagIsSpeeding
+	} else {
+		lastJournalState.ShipFlags &= ^FlagIsSpeeding
+	}
+	stateMu.Unlock()
+
 	checkSplashScreen()
 }
 
@@ -363,7 +400,23 @@ func ParseJournalLine(line []byte, state *Journalstate) {
 		eReceiveText(p)
 	case "Docked":
 		eDocked(p, state)
+	case "DockingGranted":
+		eDockingGranted(state)
+	case "DockingCancelled", "DockingTimeout":
+		eDockingTerminated(state)
 	}
+}
+
+func eDockingGranted(state *Journalstate) {
+	stateMu.Lock()
+	state.ShipFlags |= FlagDocking
+	stateMu.Unlock()
+}
+
+func eDockingTerminated(state *Journalstate) {
+	stateMu.Lock()
+	state.ShipFlags &= ^FlagDocking
+	stateMu.Unlock()
 }
 
 func eLocation(p parser, state *Journalstate) {
@@ -486,6 +539,7 @@ func eDocked(p parser, state *Journalstate) {
 	systemAddress, _ := p.getInt("SystemAddress")
 	systemName, _ := p.getString("StarSystem")
 
+	state.ShipFlags &= ^FlagDocking
 	state.Type = LocationDocked
 	state.Location.Body = stationName
 	state.Location.BodyID = 0

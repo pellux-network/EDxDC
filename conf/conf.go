@@ -15,6 +15,22 @@ type Conf struct {
 	Pages           map[string]bool `yaml:"pages"`
 	CheckForUpdates bool            `yaml:"checkforupdates"`
 	Loglevel        string          `json:"loglevel" yaml:"loglevel"`
+	Lights          LightConf       `yaml:"lights"`
+}
+
+type LightConf struct {
+	Enabled            bool       `yaml:"enabled"`
+	FlashInterval      int        `yaml:"flash_interval"`
+	Default            LightState `yaml:"default"`
+	HardpointsDeployed LightState `yaml:"hardpoints_deployed"`
+	NightVision        LightState `yaml:"night_vision"`
+}
+
+type LightState struct {
+	Inactive []string `yaml:"inactive"`
+	Active   []string `yaml:"active"`
+	Blocked  []string `yaml:"blocked"`
+	Alert    []string `yaml:"alert"`
 }
 
 // LoadOrCreateConf loads the config from the given path, or creates a default one if missing.
@@ -34,6 +50,25 @@ pages:
 
 checkforupdates: true
 loglevel: info
+
+lights:
+  enabled: true
+  flash_interval: 500
+  default:
+    inactive: [off, green]
+    active: [on, amber]
+    blocked: [off, red]
+    alert: [flash, amber-flash]
+  hardpoints_deployed:
+    inactive: [off, red]
+    active: [on, amber]
+    blocked: [off, off]
+    alert: [flash, amber-flash]
+  night_vision:
+    inactive: [off, off]
+    active: [on, green]
+    blocked: [off, off]
+    alert: [flash, green-flash]
 `
 		if err := os.MkdirAll(filepath.Dir(confPath), 0755); err != nil {
 			log.Fatal().Err(err).Msg("Failed to create config directory")

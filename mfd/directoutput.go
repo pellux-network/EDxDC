@@ -67,6 +67,10 @@ func setString(page, lineIdx uint32, line string) {
 	callProc("DirectOutput_SetString", device, uintptr(page), uintptr(lineIdx), lineLen, uintptr(unsafe.Pointer(linePtr)))
 }
 
+func setLed(page, ledIdx, value uint32) {
+	callProc("DirectOutput_SetLed", device, uintptr(page), uintptr(ledIdx), uintptr(value))
+}
+
 func callProc(procname string, args ...uintptr) {
 	proc := directOutput.NewProc(procname)
 	hresult, _, err := proc.Call(args...)
