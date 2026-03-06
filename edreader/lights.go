@@ -2,6 +2,7 @@ package edreader
 
 import (
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/pellux-network/EDxDC/conf"
