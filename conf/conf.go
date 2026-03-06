@@ -11,10 +11,27 @@ import (
 
 // Conf is the app config
 type Conf struct {
-	JournalsFolder  string          `yaml:"journalsfolder"`
+	JournalsFolder  string          `yaml:"ed_journal_folder"`
+	BindsFile       string          `yaml:"ed_binds_file"`
 	Pages           map[string]bool `yaml:"pages"`
 	CheckForUpdates bool            `yaml:"checkforupdates"`
 	Loglevel        string          `json:"loglevel" yaml:"loglevel"`
+	Lights          LightConf       `yaml:"lights"`
+}
+
+type LightConf struct {
+	Enabled            bool       `yaml:"enabled"`
+	FlashInterval      int        `yaml:"flash_interval"`
+	Default            LightState `yaml:"default"`
+	HardpointsDeployed LightState `yaml:"hardpoints_deployed"`
+	NightVision        LightState `yaml:"night_vision"`
+}
+
+type LightState struct {
+	Inactive []string `yaml:"inactive"`
+	Active   []string `yaml:"active"`
+	Blocked  []string `yaml:"blocked"`
+	Alert    []string `yaml:"alert"`
 }
 
 // LoadOrCreateConf loads the config from the given path, or creates a default one if missing.
@@ -25,7 +42,10 @@ func LoadOrCreateConf(confPath string) Conf {
 	// If config does not exist, create it with defaults
 	if _, err := os.Stat(confPath); os.IsNotExist(err) {
 		log.Warn().Str("path", confPath).Msg("Config file not found, creating default config.")
-		defaultYAML := `journalsfolder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+		defaultYAML := `# Automatically generated configuration. Leave 'ed_journal_folder' blank to auto-detect.
+# Use standard %LOCALAPPDATA% or %HOMEPATH% windows variables to resolve locations dynamically.
+ed_journal_folder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+ed_binds_file: "%LOCALAPPDATA%\\Frontier Developments\\Elite Dangerous\\Options\\Bindings\\Custom.4.2.binds"
 
 pages:
   destination: true
@@ -34,6 +54,25 @@ pages:
 
 checkforupdates: true
 loglevel: info
+
+lights:
+  enabled: true
+  flash_interval: 500
+  default:
+    inactive: [on, green]
+    active: [on, amber]
+    blocked: [off, red]
+    alert: [flash, amber-flash]
+  hardpoints_deployed:
+    inactive: [on, red]
+    active: [on, amber]
+    blocked: [off, off]
+    alert: [flash, amber-flash]
+  night_vision:
+    inactive: [off, off]
+    active: [on, green]
+    blocked: [off, off]
+    alert: [flash, green-flash]
 `
 		if err := os.MkdirAll(filepath.Dir(confPath), 0755); err != nil {
 			log.Fatal().Err(err).Msg("Failed to create config directory")
