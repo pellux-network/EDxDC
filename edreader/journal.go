@@ -344,7 +344,9 @@ func handleStatusFile(filename string) {
 	stateMu.Lock()
 	flags, _ := jsonparser.GetInt(data, "Flags")
 	flags2, _ := jsonparser.GetInt(data, "Flags2")
-	lastJournalState.ShipFlags = uint64(flags)
+	// Preserve virtual flags (derived from journal events, not present in Status.json)
+	virtualFlags := lastJournalState.ShipFlags & (FlagIsSpeeding | FlagDocking)
+	lastJournalState.ShipFlags = uint64(flags) | virtualFlags
 	lastJournalState.ShipFlags2 = uint64(flags2)
 
 	legalState, _ := jsonparser.GetString(data, "LegalState")
@@ -398,25 +400,23 @@ func ParseJournalLine(line []byte, state *Journalstate) {
 		state.ArrivedAtFSDTargetTime = time.Time{}
 	case "ReceiveText":
 		eReceiveText(p)
-	case "Docked":
-		eDocked(p, state)
 	case "DockingGranted":
 		eDockingGranted(state)
+	case "Docked":
+		eDocked(p, state)
 	case "DockingCancelled", "DockingTimeout":
-		eDockingTerminated(state)
+		eDockingCancelled(state)
+	case "FSSDiscoveryScan":
+		// No specific state change for FSSDiscoveryScan in this context
 	}
 }
 
 func eDockingGranted(state *Journalstate) {
-	stateMu.Lock()
 	state.ShipFlags |= FlagDocking
-	stateMu.Unlock()
 }
 
-func eDockingTerminated(state *Journalstate) {
-	stateMu.Lock()
+func eDockingCancelled(state *Journalstate) {
 	state.ShipFlags &= ^FlagDocking
-	stateMu.Unlock()
 }
 
 func eLocation(p parser, state *Journalstate) {

@@ -11,7 +11,8 @@ import (
 
 // Conf is the app config
 type Conf struct {
-	JournalsFolder  string          `yaml:"journalsfolder"`
+	JournalsFolder  string          `yaml:"ed_journal_folder"`
+	BindsFile       string          `yaml:"ed_binds_file"`
 	Pages           map[string]bool `yaml:"pages"`
 	CheckForUpdates bool            `yaml:"checkforupdates"`
 	Loglevel        string          `json:"loglevel" yaml:"loglevel"`
@@ -41,7 +42,10 @@ func LoadOrCreateConf(confPath string) Conf {
 	// If config does not exist, create it with defaults
 	if _, err := os.Stat(confPath); os.IsNotExist(err) {
 		log.Warn().Str("path", confPath).Msg("Config file not found, creating default config.")
-		defaultYAML := `journalsfolder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+		defaultYAML := `# Automatically generated configuration. Leave 'ed_journal_folder' blank to auto-detect.
+# Use standard %LOCALAPPDATA% or %HOMEPATH% windows variables to resolve locations dynamically.
+ed_journal_folder: "%USERPROFILE%\\Saved Games\\Frontier Developments\\Elite Dangerous"
+ed_binds_file: "%LOCALAPPDATA%\\Frontier Developments\\Elite Dangerous\\Options\\Bindings\\Custom.4.2.binds"
 
 pages:
   destination: true
@@ -55,12 +59,12 @@ lights:
   enabled: true
   flash_interval: 500
   default:
-    inactive: [off, green]
+    inactive: [on, green]
     active: [on, amber]
     blocked: [off, red]
     alert: [flash, amber-flash]
   hardpoints_deployed:
-    inactive: [off, red]
+    inactive: [on, red]
     active: [on, amber]
     blocked: [off, off]
     alert: [flash, amber-flash]

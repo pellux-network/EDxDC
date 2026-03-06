@@ -2,7 +2,7 @@ package mfd
 
 import (
 	"fmt"
-
+	"sync"
 	"github.com/rs/zerolog/log"
 )
 
@@ -53,6 +53,10 @@ var pageActive bool
 // The line index for each page
 var currentLines []uint32
 
+// The state cache to reduce USB flickering
+var lastLedStates [20]int
+var ledsMutex sync.Mutex
+
 // InitDevice sets up the device for use
 func InitDevice(pages uint32, softButtonCallback func()) error {
 	log.Info().Uint32("pages", pages).Msg("Initializing device driver")
@@ -61,6 +65,10 @@ func InitDevice(pages uint32, softButtonCallback func()) error {
 	}
 	devicePages = pages
 	currentLines = make([]uint32, pages)
+
+	for i := range lastLedStates {
+		lastLedStates[i] = -1 // -1 means unknown initial state
+	}
 
 	currentDisplay = Display{Pages: make([]Page, pages)}
 
@@ -92,15 +100,26 @@ func UpdateDisplay(display Display) error {
 
 // UpdateLeds sets the state of an LED on the device
 func UpdateLeds(ledIdx uint32, active bool) {
-	if loaded && device > 0 {
-		val := uint32(0)
-		if active {
-			val = 1
-		}
-		// Update LEDs for all pages to ensure they stay consistent when switching pages
-		for p := uint32(0); p < devicePages; p++ {
-			setLed(p, ledIdx, val)
-		}
+	if !loaded || device == 0 || ledIdx >= 20 {
+		return
+	}
+
+	val := 0
+	if active {
+		val = 1
+	}
+
+	ledsMutex.Lock()
+	if lastLedStates[ledIdx] == val {
+		ledsMutex.Unlock()
+		return
+	}
+	lastLedStates[ledIdx] = val
+	ledsMutex.Unlock()
+
+	// Update LEDs for all pages to ensure they stay consistent when switching pages
+	for p := uint32(0); p < devicePages; p++ {
+		setLed(p, ledIdx, uint32(val))
 	}
 }
 
